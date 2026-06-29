@@ -1,0 +1,12 @@
+kagglehub>=1.0
+numpy>=2.0
+pandas>=2.0
+pillow>=10.0
+opencv-python>=4.8
+matplotlib>=3.8
+scikit-learn>=1.4
+tqdm>=4.66
+PyYAML>=6.0
+torch>=2.12
+torchvision>=0.27
+jupyter>=1.0

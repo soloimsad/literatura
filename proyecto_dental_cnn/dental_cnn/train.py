@@ -45,6 +45,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-train-samples", type=int, default=0)
     parser.add_argument("--max-valid-samples", type=int, default=0)
     parser.add_argument("--num-workers", type=int, default=0)
+    parser.add_argument("--device", choices=["auto", "cuda", "cpu"], default="auto")
+    parser.add_argument("--amp", action="store_true", help="Use mixed precision on CUDA.")
+    parser.add_argument(
+        "--no-shuffle-records",
+        action="store_true",
+        help="Keep dataset discovery order before applying max sample limits.",
+    )
     parser.add_argument("--output-dir", type=Path, default=Path("runs") / "dental_unet")
     parser.add_argument("--seed", type=int, default=42)
     return parser.parse_args()
@@ -71,6 +78,11 @@ def main() -> None:
         valid_records = train_records[split_at:]
         train_records = train_records[:split_at]
 
+    if not args.no_shuffle_records:
+        rng = random.Random(args.seed)
+        rng.shuffle(train_records)
+        rng.shuffle(valid_records)
+
     train_records = limit_records(train_records, args.max_train_samples or None)
     valid_records = limit_records(valid_records, args.max_valid_samples or None)
 
@@ -93,21 +105,33 @@ def main() -> None:
         pin_memory=torch.cuda.is_available(),
     )
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = select_device(args.device)
+    amp_enabled = bool(args.amp and device.type == "cuda")
     model = build_model(args.mask_mode, len(class_names), args.base_channels).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
     criterion = nn.BCEWithLogitsLoss() if args.mask_mode == "binary" else nn.CrossEntropyLoss()
+    scaler = torch.amp.GradScaler("cuda", enabled=amp_enabled)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     best_score = -1.0
     history: list[dict[str, Any]] = []
 
     print(f"Device: {device}")
+    print(f"AMP: {'enabled' if amp_enabled else 'disabled'}")
     print(f"Train records: {len(train_ds)} | Valid records: {len(valid_ds)}")
     print(f"Classes ({len(class_names)}): {', '.join(class_names)}")
 
     for epoch in range(1, args.epochs + 1):
-        train_loss = run_train_epoch(model, train_loader, criterion, optimizer, device, args.mask_mode)
+        train_loss = run_train_epoch(
+            model,
+            train_loader,
+            criterion,
+            optimizer,
+            device,
+            args.mask_mode,
+            scaler,
+            amp_enabled,
+        )
         valid_loss, metrics = run_eval_epoch(model, valid_loader, criterion, device, args.mask_mode)
         row = {"epoch": epoch, "train_loss": train_loss, "valid_loss": valid_loss, **metrics}
         history.append(row)
@@ -133,18 +157,22 @@ def run_train_epoch(
     optimizer: torch.optim.Optimizer,
     device: torch.device,
     mask_mode: str,
+    scaler: torch.amp.GradScaler,
+    amp_enabled: bool,
 ) -> float:
     model.train()
     total_loss = 0.0
     total_items = 0
     for images, masks in tqdm(loader, desc="train", leave=False):
-        images = images.to(device)
-        masks = masks.to(device)
+        images = images.to(device, non_blocking=True)
+        masks = masks.to(device, non_blocking=True)
         optimizer.zero_grad(set_to_none=True)
-        logits = model(images)
-        loss = compute_loss(logits, masks, criterion, mask_mode)
-        loss.backward()
-        optimizer.step()
+        with torch.amp.autocast(device_type=device.type, enabled=amp_enabled):
+            logits = model(images)
+            loss = compute_loss(logits, masks, criterion, mask_mode)
+        scaler.scale(loss).backward()
+        scaler.step(optimizer)
+        scaler.update()
         batch_size = images.size(0)
         total_loss += float(loss.item()) * batch_size
         total_items += batch_size
@@ -165,8 +193,8 @@ def run_eval_epoch(
     metric_accumulator: dict[str, list[float]] = {"dice": [], "iou": [], "pixel_accuracy": []}
 
     for images, masks in tqdm(loader, desc="valid", leave=False):
-        images = images.to(device)
-        masks = masks.to(device)
+        images = images.to(device, non_blocking=True)
+        masks = masks.to(device, non_blocking=True)
         logits = model(images)
         loss = compute_loss(logits, masks, criterion, mask_mode)
         batch_size = images.size(0)
@@ -182,6 +210,8 @@ def run_eval_epoch(
         else:
             preds = torch.argmax(logits, dim=1)
             metric_accumulator["pixel_accuracy"].append(float((preds == masks).float().mean().item()))
+            metric_accumulator["dice"].append(float(binary_dice((preds > 0).float(), (masks > 0).float()).item()))
+            metric_accumulator["iou"].append(float(binary_iou((preds > 0).float(), (masks > 0).float()).item()))
 
     metrics = {
         key: float(np.mean(values))
@@ -247,6 +277,16 @@ def set_seed(seed: int) -> None:
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
+
+
+def select_device(requested: str) -> torch.device:
+    if requested == "cuda":
+        if not torch.cuda.is_available():
+            raise SystemExit("CUDA was requested, but torch.cuda.is_available() is false.")
+        return torch.device("cuda")
+    if requested == "cpu":
+        return torch.device("cpu")
+    return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 if __name__ == "__main__":

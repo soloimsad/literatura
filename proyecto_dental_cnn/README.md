@@ -24,6 +24,9 @@ de inferencia refina el resultado con morfologia y componentes conectados.
 
 ## Instalacion
 
+Ruta recomendada: usar Google Colab con GPU. Ver [COLAB.md](COLAB.md) y abrir
+`notebooks/proyecto_dental_cnn_colab.ipynb`.
+
 Desde esta carpeta:
 
 ```powershell
@@ -59,7 +62,7 @@ python -m dental_cnn.train --mask-mode binary --epochs 1 --batch-size 2 --max-tr
 Entrenamiento mas defendible:
 
 ```powershell
-python -m dental_cnn.train --epochs 15 --batch-size 4 --image-width 512 --image-height 256 --output-dir runs/dental_unet
+python -m dental_cnn.train --mask-mode binary --epochs 20 --batch-size 16 --image-width 512 --image-height 256 --base-channels 16 --num-workers 2 --amp --output-dir runs/dental_unet
 ```
 
 Entrenamiento enfocado en algunas clases:

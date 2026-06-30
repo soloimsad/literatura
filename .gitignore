@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Colab/runtime artifacts
+proyecto_dental_cnn/runs/
+proyecto_dental_cnn/outputs/
+proyecto_dental_cnn/data/
+
+# Local environment files
+.env
+.venv/
+venv/

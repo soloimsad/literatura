@@ -11,7 +11,6 @@ from dental_xray_pipeline import (
     PREPARED_TEETH_DIR,
     PROJECT_ROOT,
     SEED,
-    audit_segmentation_dataset,
     audit_teeth_dataset,
     ensure_model_under_models,
     find_segmentation_yolo_dir,
@@ -132,6 +131,7 @@ def write_preparation_summary(work_dir: Path, preparation_summary: dict) -> None
 
 
 def prepare_tooth_dataset(work_dir: Path) -> Path:
+    work_dir.mkdir(parents=True, exist_ok=True)
     dataset_root = resolve_teeth_dataset()
     supervisely_dir = find_teeth_supervisely_dir(dataset_root)
     audit = audit_teeth_dataset(dataset_root, supervisely_dir)
@@ -146,17 +146,41 @@ def prepare_tooth_dataset(work_dir: Path) -> Path:
 
 
 def prepare_treatment_dataset(work_dir: Path) -> Path:
+    work_dir.mkdir(parents=True, exist_ok=True)
     dataset_root = resolve_segmentation_dataset()
     yolo_dir = find_segmentation_yolo_dir(dataset_root)
-    audit = audit_segmentation_dataset(dataset_root, yolo_dir)
-    write_audit_files(audit, work_dir)
-
     data_yaml, preparation_summary = make_local_yolo_yaml(
         yolo_dir,
         work_dir / "prepared_yolo_seg" / "data.yaml",
     )
     write_preparation_summary(work_dir, preparation_summary)
+    write_fast_treatment_summary(work_dir, yolo_dir, data_yaml, preparation_summary)
     return data_yaml
+
+
+def write_fast_treatment_summary(
+    work_dir: Path,
+    yolo_dir: Path,
+    data_yaml: Path,
+    preparation_summary: dict,
+) -> None:
+    names = read_yaml(data_yaml).get("names", {})
+    lines = [
+        "# Analisis rapido del dataset de tratamiento/hallazgo",
+        "",
+        f"Dataset YOLO usado: `{yolo_dir}`",
+        "",
+        "## Splits",
+        "",
+    ]
+    for split, info in preparation_summary.get("splits", {}).items():
+        lines.append(f"- {split}: {info['images']} imagenes, {info['labels']} labels")
+
+    lines.extend(["", "## Clases", ""])
+    for class_id, name in names.items():
+        lines.append(f"- {class_id}: {name}")
+
+    (work_dir / "DATASET_ANALYSIS.md").write_text("\n".join(lines), encoding="utf-8")
 
 
 def prepare_dataset(role: str, work_dir: Path) -> Path:

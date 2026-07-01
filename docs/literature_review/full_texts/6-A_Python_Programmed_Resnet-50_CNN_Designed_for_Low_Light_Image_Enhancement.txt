@@ -1,0 +1,593 @@
+# Source PDF: 6-A_Python_Programmed_Resnet-50_CNN_Designed_for_Low_Light_Image_Enhancement.pdf
+# Pages: 6
+
+
+
+--- PAGE 1 ---
+
+979-8-3315-1485-3/25/$31.00©2025 IEEE 
+ 
+A Python Programmed Resnet-50 CNN 
+Designed for Low Light Image Enhancement 
+ 
+S. Ganesan 
+Department of ECE 
+Sri Manakula Vinayagar Engineering 
+College 
+Puducherry, India 
+Sganesan0@gmail.com 
+ 
+ 
+A. Giribabu 
+Department of ECE 
+Sri Manakula Vinayagar Engineering 
+College 
+Puducherry, India 
+btechece210771@smvec.ac.in 
+G. G. Muthukumar 
+Department of EEE 
+Mailam Engineering College 
+Mailam, Tamilnadu, India 
+muthukumargg@gmail.com 
+ 
+ 
+S. Satishkumar 
+Department of ECE 
+Sri Manakula Vinayagar Engineering 
+College 
+Puducherry, India 
+btechece211755@smvec.ac.in 
+J. Aravindsamy 
+Department of ECE 
+Sri Manakula Vinayagar Engineering 
+College 
+Puducherry, India 
+btechece210693@smvec.ac.in 
+ 
+S. Udhayachandidran 
+Department of ECE 
+Sri Manakula Vinayagar Engineering 
+College 
+Puducherry, India 
+btechece220027@smvec.ac.in  
+Abstract—Enhancing the quality of photos taken in low light 
+is the goal of the computer vision problem known as Low-Light 
+Image Enhancement. Increasing the brightness, clarity, and 
+visual attractiveness of images while minimizing noise and 
+distortion is the aim of low -light image enhancement . Most 
+CNN-based methods have complex network structures and the 
+network consists of several sub-networks. The challenges posed 
+by insufficient illumination in image enhancement with their 
+visual quality low light condition often lead to reduced visibility 
+and loss of important details, impacting various applications in 
+autonomous system. In contrast to these problems we utilize 
+ResNet-50 for image segmentation up to 50 layers to reduce 
+noises in image, scattering of images and more focusing on 
+higher brightness places in an image. Python programming is 
+used to restoring edges and textures and improving overall 
+image visibility. According to our experimental results, the 
+proposed method achieves improvised image in clarity and 
+environmental issues such as fog, pollution. 
+Keywords—Image enhancement, CNN -Efficient Net B0, 
+SSIM loss, Artificial Intelligence, gradient vanishing, 
+Enhancement methods 
+I. INTRODUCTION  
+Although they can learn intricate mappings between high-
+quality and low-light pictures, CNNs a well -liked option for 
+this problem is ResNet-50, a deep CNN architecture with 50 
+layers. Using the learned features of a pre -trained ResNet-50 
+model that has been refined on a dataset of low -light photos, 
+the visual quality of low-light photos will be enhanced. 
+Our goal in this study is to create a Python application that 
+enhances low -light images using a pre -trained ResNet -50 
+CNN. The framework will be trained on a dataset of low-light 
+photos to learn how to improve their visual quality. The 
+application will be implemented in Python and will assess 
+performance using image quality metrics such as Structural 
+Similarity Index (SSIM) and Peak Signal -to-Noise Ratio 
+(PSNR). 
+Low-light image enhancement is used in a variety of 
+situations, such as fog dehazing, underwater imaging, and 
+night-day time conversions. All of these circumstances work 
+with photos that have backlighting, uneven lighting, and low 
+lighting. Their goal is to create perceptual images from these 
+poorly obtained ones. All of the Low Light Image 
+Enhancement works fall under the areas listed below. Resnet-
+50 uses a variety of techniques, including Histogram 
+Equalization, Retinex Decomposition, and Deep Learning, to 
+transform low -light images into brighter, more enhanced 
+images. 
+Deep learning methods have recently been applied 
+extensively and shown to have great accuracy in predicting 
+images in natural light. One kind of artificial intelligence that 
+draws inspiration from the human brain is deep learning. It 
+analyzes vast volumes of data using sophisticated neural 
+networks, revealing the complex patterns and relationships 
+depicted in figure 1. This pushes the limits of what robots can 
+accomplish by enabling them to carry out activities like speech 
+translation, image identification, and even the creation of 
+creative material.  
+ 
+Fig.1. Block Diagram network architecture 
+They are categorized according to their learning input 
+as 
+  Supervised learning  
+ Unsupervised learning 
+In supervised learning, a machine learning model is 
+trained with marked data. This information includes input 
+features and the intended outputs that go along with them. In 
+essence, the model picks up a mapping function between these 
+outputs and cha racteristics. For problems including object 
+2025 International Conference on Emerging Technologies in Engineering Applications (ICETEA) | 979-8-3315-1485-3/25/$31.00 ©2025 IEEE | DOI: 10.1109/ICETEA64585.2025.11099660
+Authorized licensed use limited to: Universidad Tecnica Federico Santa Maria. Downloaded on June 25,2026 at 01:45:44 UTC from IEEE Xplore.  Restrictions apply.
+
+
+--- PAGE 2 ---
+
+detection, regression, and classification, supervised learning is 
+frequently employed. 
+The machine learning model in unsupervised learning 
+works with unlabeled data, which is data that does not have 
+any predetermined labels or groups. In contrast to input-output 
+pairings in supervised learning, unsupervised learning 
+algorithms seek to uncover hidden patterns and structures in 
+the data. For tasks including anomaly detection, 
+dimensionality reduction, and clustering , unsupervised 
+learning is frequently employed. 
+II. EXISTING SYSTEM 
+Inadequate illumination can have an impact on photos that 
+are taken in low light. A digital image processing method 
+called low -light image enhancement, or LLIE, transforms 
+low-light photographs into typical, natural-light ones. LLIE's 
+three primary goals are to replicate natural brightness and 
+colour, preserve edges and textures, and minimize noise and 
+artifacts. Deep learning-based methods that can achieve high 
+performance have been the focus of numerous sorts of 
+research in recent years. The lengthy inference time caused by 
+intricate network topologies is the main issue with these 
+approaches, though.  
+In order to address the trade -off between implementation 
+time and performance, they present a straightforward network 
+with efficient modules. To maintain edges and textures, pre -
+processing is used and we use a U-Net structure. To preserve 
+high-frequency details, our method integrates Pixel Shuffler, 
+while Channel Attention mechanisms help enhances  color 
+fidelity and illumination. Additionally, we incorporate a Res 
+FFT-ReLU block to effectively suppress noise. Experimental 
+evaluations demonstrate that our approach surpasses 
+traditional low-light image enhancement (LLIE) methods in 
+both speed and overall performance. 
+By controlling the effect of classic histogram equalization 
+(HE), the dynamic histogram equalization (DHE) technology 
+enhances an image without sacrificing any of its nuances. 
+Dynamic Histogram Equalization (DHE) improves contrast 
+by segmenting the image histogram at local minima and then 
+performing histogram equalization independently within each 
+segment, allowing better preservation of image details. To 
+make sure there are no dominating sections, these partitions 
+are also subjected to a repartitioning test. This technique 
+performs better than other current methods because it 
+improves contrast without producing unwanted artifacts or 
+serious negative effects like washed -out appearance or 
+checkerboard effects. 
+This study investigates the optimal skid height and landing 
+safety of an aerial vehicle operating on sloped terrain by 
+analyzing the surface angle of the landscape. Advanced 
+computer vision techniques such as Canny edge detection and 
+Haar cascades are employed to identify objects and ex tract 
+landscape boundaries from captured images. The redesigned 
+landing skid aims to enhance the aerial vehicle's ability to land 
+securely and efficiently on uneven ground. 
+Typically, little information is available to improve photos 
+taken in poor light. To obtain trustworthy information for the 
+augmentation, we suggest taking advantage of the interactions 
+between superposed luminance levels. A noise -resilient 
+transformation is then used after Grover's method executes the 
+interaction that causes information to flow between brightness 
+levels. Based on both qualitative and quantitative data, our 
+concept improves low light images better than the state-of-the-
+art. 
+III. PROPOSED METHODOLOGY 
+Although photos taken in low light have poor visual 
+quality, enhancing photographs in low light is a major 
+difficulty. We address this by treating low-light enhancement 
+as a residual learning problem, with the goal of estimating the 
+difference (residual) between photos taken in normal light and 
+those taken in low light. In order to improve low-light picture 
+enhancement, we present a unique Convolutional Neural 
+Network (CNN) based on the ResNet50 architecture in this 
+study.  
+Although it is classified as a low -level image processing 
+activity, low-light enhancement is very different from tasks 
+like image denoising and super resolution. Pixel values in 
+deteriorated photos are usually near to their true values in 
+super resolution and denoising, with just slight variations in 
+average pixel values. Low -light enhancement, on the other 
+hand, results in images with higher noise and less contrast. As 
+a result, we create a customized ResNet50 architecture for 
+improving low-light photos, e mphasizing the acquisition of 
+complex low-light-specific properties. 
+A. Algorithm  
+CNNs, such as the ResNet-50 architecture, are widely used 
+for object classification tasks involving multiple categories. 
+Rather than relying on clustering, these models learn complex 
+hierarchical features through convolutional layers. CNNs are 
+often considered translation -invariant due to their shared -
+weight structure and receptive field mechanism. Their 
+versatility makes them suitable for a range of tasks including 
+image and vi deo recognition, medical imaging, natural 
+language processing, and recommendation systems.  
+Convolutional Neural Networks (CNNs) can be viewed as 
+a regularized form of multilayer perceptrons (MLPs). While 
+MLPs are typically fully connected —where each neuro n in 
+one layer connects to every neuron in the next —this full 
+connectivity often leads to over fitting. Traditional 
+regularization techniques such as weight decay and dropout 
+are commonly applied to mitigate this. CNNs, however, 
+achieve a different form of regularization by leveraging local 
+connectivity and shared weights. They capture hierarchical 
+patterns in data by learning simple features in early layers and 
+progressively combining them into more complex 
+representations. As a result, CNNs exhibit lower parameter 
+complexity and reduced risk of over fitting compared to fully 
+connected networks. 
+Convolutional neural networks (CNNs) are inspired by 
+biological processes, particularly the visual perception 
+mechanisms found in animals. Although the precise 
+correspondence between artificial neuron connections and the 
+animal visual cortex is not fully understood, CNNs mimic the 
+concept of receptive fields. In the visual cortex, a receptive 
+field refers to the specific region of the input space where a 
+neuron responds. These fields often overlap, enabling the full 
+visual field to be represented through the combined activity of 
+many neurons. 
+CNNs require a relatively lower amount of pre-processing 
+than other image classification techniques. In conventional 
+systems, the convolution kernels or filters are manually built; 
+this suggests that the network learns to optimize them.  One 
+Authorized licensed use limited to: Universidad Tecnica Federico Santa Maria. Downloaded on June 25,2026 at 01:45:44 UTC from IEEE Xplore.  Restrictions apply.
+
+
+--- PAGE 3 ---
+
+significant benefit is its independence from human interaction 
+in feature extraction and prior knowledge.  
+ 
+ 
+Fig. 2. Flow chart 
+A shape-based tensor from CNN based input, 
+[𝑁𝑢𝑚𝑏𝑒𝑟 𝑜𝑓 
+𝑖𝑚𝑎𝑔𝑒𝑠 ]  ×  [𝑖𝑚𝑎𝑔𝑒 
+ℎ𝑒𝑖𝑔ℎ𝑡 ]  ×  [ 𝑖𝑛𝑝𝑢𝑡 
+𝐶ℎ𝑎𝑛𝑛𝑒𝑙𝑠]                                     (1) 
+The picture is abstracted to a feature map with shape after 
+going through a convolutional layer 
+[NUMBER OF 
+IMAGES ]  ×  [
+FEATURE 
+IMAGE
+HEIGHT
+]  ×  [
+FEATURE 
+MAP
+WIDTH
+] × [
+FEATURE
+MAP 
+CHANNELS
+]                                (2) 
+A neural network's convolutional layer ought to possess 
+the following qualities: 
+Convolutional filters in CNNs are defined by several 
+hyperparameters, including their height, width, and the 
+number of input and output channels. One key constraint is 
+that the depth of the filter (i.e., the number of input channels) 
+must match the depth of the input feature map. This ensures 
+that each filter process es all available channels of the input 
+data correctly. 
+The convolution operation in neural networks relies on 
+key hyperparameters such as padding and stride. After 
+applying the convolution, each layer passes the resulting 
+feature maps to the next. This mec hanism mimics how 
+neurons in the visual cortex respond to specific regions of the 
+visual field —referred to as receptive fields. Each 
+convolutional neuron processes only the input within its 
+receptive region, enabling localized feature extraction. Unlike 
+fully connected networks, which are parameter -heavy and 
+inefficient for image data, convolutional networks are more 
+suitable for processing photographs due to their spatial 
+locality and weight sharing. 
+Processing image data with fully connected networks is 
+inefficient due to the high dimensionality —each pixel in an 
+image represents a unique input feature. For instance, a fully 
+connected layer handling a 100×100 pixel image would 
+require 10,000 weights pe r neuron, resulting in a massive 
+number of parameters. Convolutional layers address this by 
+significantly reducing parameter count through local 
+connectivity and weight sharing. A 5×5 filter, for example, 
+requires just 25 learnable weights regardless of the image size, 
+which makes training more efficient. Additionally, using 
+fewer parameters helps reduce overfitting and mitigates issues 
+like vanishing or exploding gradients during backpropagation. 
+To reduce computational complexity, convolutional 
+neural net works often use pooling layers —either local or 
+global. These layers downsample feature maps by aggregating 
+information from small regions, effectively reducing spatial 
+dimensions. Local pooling, such as 2×2 max or average 
+pooling, combines nearby activatio ns into a single 
+representative value, which helps preserve key features while 
+lowering the data size passed to the next layer. 
+Global pooling operates across all spatial positions in a 
+feature map, summarizing the output of an entire 
+convolutional layer. The two most commonly used pooling 
+methods are average pooling, which computes the mean of 
+values within a region, and max pooling, which selects the 
+highest value. In convolutional neural networks, the 
+convolutional layer plays a fundamental role. It cons ists of 
+trainable filters (or kernels) that slide across the input volume 
+with a limited spatial extent, while spanning the full depth of 
+the input data.  
+During the forward pass in a convolutional neural 
+network, each filter slides over the spatial dimens ions of the 
+input volume. At each position, the filter computes a dot 
+product with the overlapping input region, generating a 
+corresponding value in the resulting 2D feature map, also 
+known as the activation map. 
+ 
+Fig. 3. Feature Extraction Process 
+In a convolutional neural network, each filter is trained to 
+respond to specific features at particular spatial locations 
+within the input. The output of a convolutional layer consists 
+of multiple feature maps, one per filter, which are stacked 
+along the depth a xis to form the final output volume. Each 
+neuron in a feature map processes a local region of the input 
+and shares its weights with others in the same map, allowing 
+efficient feature extraction across the spatial dimensions. 
+ 
+ 
+Authorized licensed use limited to: Universidad Tecnica Federico Santa Maria. Downloaded on June 25,2026 at 01:45:44 UTC from IEEE Xplore.  Restrictions apply.
+
+
+--- PAGE 4 ---
+
+B. Proposed Methodology CNN with RESNET 50 
+Residual Networks (ResNets) are a type of convolutional 
+neural network (CNN) designed to address the vanishing 
+gradient problem in deep architectures.  
+Widely used in computer vision tasks, ResNets introduce 
+shortcut connections that allow gradi ents to flow more 
+effectively during training. ResNet -50, a popular variant, 
+consists of 50 layers including 48 convolutional layers, one 
+max pooling layer, and one average pooling layer. These 
+layers are organized into residual blocks that enable the 
+construction of very deep networks without degradation in 
+performance. 
+ResNet-34 is part of the family of residual neural networks 
+and includes 34 learnable layers. These models are often 
+pretrained on large -scale datasets such as ImageNet, which 
+contains over  a million labeled images across various 
+categories. A key innovation in ResNet is the use of shortcut 
+(or skip) connections, which help mitigate the vanishing 
+gradient problem by allowing the network to learn residual 
+mappings. Instead of learning the ful l transformation, each 
+block learns the difference —or residual—between the input 
+and the desired output, enabling the training of much deeper 
+networks. 
+VGG architectures such as VGG -16 and VGG -19 utilize 
+uniform 3×3 convolutional filters and were influential in early 
+deep learning models for image recognition. However, 
+ResNets are more computationally efficient. For example, 
+while VGG-19 requires approximately 19.6 billion floating -
+point operations (FLOPs), a ResNet -34 achieves similar 
+performance with only  3.6 billion FLOPs, and ResNet -18 
+requires just 1.8 billion FLOPs. This significant reduction in 
+computation makes ResNets faster and more scalable for 
+deeper architectures 
+ResNet-50 comprises fifty levels and five blocks, each of 
+which has a set of residual blocks. The residual blocks allow 
+information from earlier layers to be preserved, which helps 
+the network create better representations of the data it 
+receives. ResNet is what you ought to use. It is deep enough, 
+with 34, 50, or 101 layers, to begin. A s the hierarchy's depth 
+increases, so do the classification accuracy and representation 
+capabilities.  
+The comparatively shallow CNN is unable to outperform 
+random guessing (which has a 50% chance of being correct 
+when guessing between two classes) when trained on just 20 
+photos per class. ResNet50 is a deep pre-trained network that 
+requires only 20 images per class and has an accuracy rate of 
+70%.  
+IV. PROPOSED WORK 
+Though low-light enhancement is categorized as a low -
+level image processing activity, it is not the same as activities 
+like image denoising and super resolution. Pixel values in 
+degraded photos are usually near to their true values in super 
+resolution and denoising, with just slight variations in average 
+pixel values. In contrast, low -light enhancement causes 
+images to have more noise and less contrast. Therefore, we 
+create a customized ResNet50 architecture for improving low-
+light photos, emphasizing the acquisition of complex low -
+light-specific properties. 
+We aim to enhance the visual quality of low-light images 
+by training a ResNet50 -based convolutional neural network 
+on a specialized dataset. The model is designed to learn and 
+adapt to the unique characteristics of low-light environments. 
+This approach has practical relevance across various fields, 
+including digital photography, video surveillance, and 
+autonomous vehicle systems, where improving vi sibility 
+under challenging lighting conditions is critical 
+By training our CNN based on ResNet50 on a dataset of 
+low-light photos, we hope to improve the visual quality of the 
+images by efficiently comprehending and utilizing the special 
+qualities of low-light conditions. With potential uses in a 
+number of domains, including photography, surveillance, and 
+autonomous driving, this method provides a practical way to 
+enhance image quality in low light. 
+A. General formulation of low-light image enhancement  
+Over the past few decades, the science of computer vision 
+has developed a variety of methods for enhancing low -light 
+images. The notion that intrinsic properties of underlying 
+contents (such as object reflectance, background colour, noise 
+level, etc.)  should be maintained during the  enhancement 
+process is shared by the majority of earlier methods,  despite 
+the fact that their approaches to algorithm design differ greatly 
+from one another. The general steps involved in improving 
+low-light images can be expressed simply as follows:  
+𝐸 (𝑥, 𝑦) = 𝑓 (𝑓 (𝑥, 𝑦))                                                (3) 
+B. Implementation 
+The Drive was interfaced with Colab, and all required 
+libraries—including PyTorch, TensorFlow,  Wandb, 
+Matplotlib, among others—were imported. 
+ To access the images, the Custom Dataset class needs to 
+be constructed; to increase the quantity of training data, the 
+Data Augmentation class needs to be defined. In addition to 
+this, establish the learning parameters and start training. 
+Following training, pictures from the Evaluation dataset are 
+used to confirm the Model's performance. 
+ 
+Fig.4 .Low light image enhancement system 
+V. RESULTS VALIDATION 
+The proposed CNN with ResNet -50 approach for low -
+light picture enhancement shows impressive effectiveness in 
+improving the quality of photos taken in difficult lighting 
+situations. Our approach uses a specific module to leverage 
+multi-scale characteristic maps and SSIM degradation to 
+preserve image textures, and it beats previous methods in 
+adaptively enhancing the contrast of low-light photos.  
+Authorized licensed use limited to: Universidad Tecnica Federico Santa Maria. Downloaded on June 25,2026 at 01:45:44 UTC from IEEE Xplore.  Restrictions apply.
+
+
+--- PAGE 5 ---
+
+Experiments reveal notable enhancements in brightness, 
+clarity, and visual appeal without adding undue noise or 
+distortion, confirming the superiority of our approach. Our 
+method produces an adaptively improved contrast that not 
+only improves image quality but also performs better than 
+other contrast enhancement methods. 
+Overall, our CNN with ResNet -50 based approach 's 
+efficacy shows that it can be a powerful solution for problems 
+involving the augmentation of low -light images, offering 
+practical benefits in a variety of computer vision applications. 
+ 
+Fig.5. Low light input image 
+A. Results 
+The low light input image in Figure 5 is processed using 
+machine learning to save processing time and convert the 
+image to PNG format. Google Colab is used to launch the 
+image, which is then saved on a drive. 
+B. Parameters 
+ 
+Fig.6. Functional parameter 
+ 
+ 
+Fig.7. Low resolution image 
+Low resolution is the term used to describe a display, 
+video, or image that has less clarity or detail. It indicates that, 
+in comparison to its high -resolution contenders, the content 
+appears less crisp and precise. This may be because there are 
+fewer pixels or a smaller colour scheme used to depict the 
+image. The low resolution image of the trained input image is 
+displayed in Fig. 7. 
+When compared to low-resolution photos, high-resolution 
+images have more information and clarity since they have a 
+lot more pixels per unit of area. Pixels per inch (PPI) or dots 
+per inch (DPI) are commonly used to measure resolution.  
+By changing the image resolution from high to low and 
+low to high the contents of the images at its sharp edges are 
+enhanced to give a better image.   
+Predicted image is images which automatically fill the 
+empty places in the image and increase or decrease the 
+contrast, brightness value of image in required pixels.  Fig. 9 
+shows the predicted resolution image of the train ed input 
+image after the higher resolution training. 
+The LLIE technique based on CNN and ResNet-50 shows 
+impressive effectiveness in improving the quality of photos 
+taken in difficult lighting situations. Results from experiments 
+confirm the effectiveness of our approach, demonstrating 
+notable enhancements in brightness, clarity, and aesthetic 
+appeal without adding undue distortion or noise. 
+ 
+ 
+Fig.8 .High resolution image 
+ 
+Input image       Output image 
+Fig.9 .Final predicted image 
+VI. CONCLUSION 
+In this work, we proposes a CNN with ResNet -50 
+architecture for enhancing low -light images, utilizing 
+multiscale feature maps and SSIM loss for adaptive contrast 
+enhancement while preserving textures.  
+Implemented in Python and Google Colab Notebook, the 
+method demons trates superior performance over traditional 
+techniques, leveraging ResNet -50's depth and hierarchical 
+representation for real -world applications, advancing 
+computer vision, and fostering future AI and ML innovations. 
+ 
+ 
+Authorized licensed use limited to: Universidad Tecnica Federico Santa Maria. Downloaded on June 25,2026 at 01:45:44 UTC from IEEE Xplore.  Restrictions apply.
+
+
+--- PAGE 6 ---
+
+REFERENCES 
+[1] Li Tao, Chuang Zhu, "Low-light image enhancement using CNN and 
+Bright Channel prior," Available at: 
+https://ieeexplore.ieee.org/document/8296876, pp. 1-5, 2017. 
+[2] Li Tao; Chuang Zhu; Guoqing Xiang; Yuan Li; Huizhu Jia; Xiaodong 
+Xie, "LLCNN: A convolutional neural netw ork for low -light image 
+enhancement  2020", Available at: 
+https://ieeexplore.ieee.org/document/8305143,  2020 
+[3] Li-Wen Wang, Zhi-Song Liu, Wan-Chi Siu, "Lightening network for 
+low-light image enhancement",  Available at: 
+https://www.researchgate.net/publication/342966400, July 2020 pp. 
+99.  
+[4] V. Ratna Sri 1, K.Ushodaya, "Low -light image enhancement using  
+CNN," Available at: https://jespublication.com/upload /2023-
+V14I40126, 2023.  
+[5] S. Ganesan, U. Hariharan,P. Naveen & S. Somnath., "Aerial Vehicle 
+Landing on a Sloped Surface with Variable Skid Height Using Canny 
+Edge Detection", International Conference on System, Computation, 
+Automation and Networking, Available at: 
+https://ieeexplore.ieee.org/document/ 10395059 pp.1-5, November 
+2023. 
+[6] Liang-Jian Deng, Honggang Chen, Xiaole Zhao, Yuwei Jin, "A survey 
+of Deep Learning-based low-light image enhancement", Available at: 
+https://www.mdpi.com/1424-8220/23/18/7763, September, 2023. 
+[7] D. J. Jobson, Z. Rahman, and G. A. Woodell, "Properties and 
+performance of a  center/surround retinex," Available at 
+https://ieeexplore.ieee.org/document/557356, Mar. 1996. 
+[8] Rahman, Z., D. J. Jobson, and G. A. Woodell, "Multi-scale retinex for 
+color image enhancement," Available at 
+https://ieeexplore.ieee.org/document/56099, August 2002. 
+[9] Jobson, D. J., Z. Rahman, and G. A. Woodell. "A multiscale retinex for 
+bridging the gap between color images and the human observation of 
+scenes," IEEE Transactions on Image processing, vol. 6, no. 7, pp. 965- 
+976, July 1997.  
+[10]  Pisano E D, Zong S, He mminger B M,  "Contrast Limited Adaptive 
+Histogram Equalization image processing to improve the detection of 
+simulated spiculations in dense mammograms," Available at: 
+https://link.springer.com/article/10.1007/BF0317 8082, November 
+1998. 
+[11] Abdullah-Al-Wadud, M, "A Dynamic Histogram Equalization for 
+Image Contrast Enhancement," Available at:  
+https://ieeexplore.ieee.org/document/4266947, May 2007. 
+[12] Lin Li, Ronggang Wang,Wenmin Wang, Wen Gao, "A low-light image 
+enhancement method for both denoising and contrast enlarging," IEEE 
+International Conference on Image Processing IEEE (ICIP),  DOI: 
+http://dx.doi.org/10.1109/ICIP.2015.7351501, September 2015. 
+[13] Fu X, Zeng D, Huang Y,  "A weighted variational model for 
+simultaneous reflectance and illumination estimation," Available at:  
+https://ieeexplore.ieee.org/ document/7780673, June 2016. 
+[14] Jiwon Kim, Jung Kwon Lee and Kyoung Mu Lee, "Accurate Image 
+Super Resolution Using Very Deep Convolutional Networks," 
+Available at: https://ieeexplore. ieee.org/document/7780551 , June 
+2016. 
+[15]  Guo X, Li Y, Ling H. "LIME: Low -Light Image Enhancement via 
+Illumination Map Estimation," Available at: 
+https://ieeexplore.ieee.org/document/7782813 December 2016.  
+[16] Zhang K, Zuo W, Chen Y, "Beyond a Gaussian denoiser: Residual 
+learning of deep CNN for image denoising ," Available at: 
+https://ieeexplore.ieee.org/ document/ 7839189, February 2017.
+ 
+Authorized licensed use limited to: Universidad Tecnica Federico Santa Maria. Downloaded on June 25,2026 at 01:45:44 UTC from IEEE Xplore.  Restrictions apply.

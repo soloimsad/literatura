@@ -1,0 +1,342 @@
+# Source PDF: 0-Lineamientos_PRIM_INF402.pdf
+# Pages: 10
+
+
+
+--- PAGE 1 ---
+
+INF-402
+Procesamiento y Reconstrucción de Imágenes Médicas
+Departamento de Informática • Universidad Técnica Federico Santa María
+Lineamientos de Evaluación
+Presentación de Revisión Bibliográfica y Proyecto Final
+Asignatura INF-402 – Procesamiento y Reconstrucción de Imágenes Médicas
+Sigla INF-402
+Unidad Académica Departamento de Informática
+Docente Julio Sotelo
+Créditos 6 SCT-Chile
+Evaluaciones cubiertas Presentación de Literatura (15%) • Proyecto Final (45%)
+
+
+--- PAGE 2 ---
+
+PARTE I
+Presentación de Revisión Bibliográfica
+1. Descripción General
+La presentación de revisión bibliográfica tiene como objetivo que el estudiante demuestre capacidad 
+para identificar, analizar críticamente y sintetizar el estado del arte en el área temática de su proyecto 
+final. Esta actividad representa el 15% de la nota final del curso.
+El estudiante deberá recopilar un mínimo de 7 artículos científicos relevantes relacionados con su  
+proyecto final, y presentarlos de forma estructurada y argumentada ante el curso.
+2. Requisitos de los Artículos Seleccionados
+2.1 Cantidad y calidad
+• Mínimo 7 artículos científicos.
+• Los artículos deben estar publicados en revistas o conferencias indexadas (IEEE, Springer,  
+Elsevier, MICCAI, SPIE Medical Imaging, etc.).
+• Se aceptan artículos en inglés o español.
+• Se recomienda priorizar publicaciones de los últimos 5 años (2021–2025), aunque se pueden 
+incluir referencias anteriores si son fundamentales para el tema.
+2.2 Tipos de fuentes aceptadas
+• Artículos de revistas científicas (e.g., IEEE Transactions on Medical Imaging, Medical Image 
+Analysis, Radiology, etc.).
+• Artículos de conferencias de alto impacto (e.g., MICCAI, ISBI, EMBC, SPIE).
+2.3 Fuentes no aceptadas
+• Blogs, Wikipedia u otras enciclopedias online.
+• Tesis de pregrado o postgrado como fuente primaria (sólo como referencia complementaria).
+• Artículos sin revisión por pares (preprints de arXiv solo se aceptan si también han sido  
+publicados formalmente).
+3. Estructura de la Presentación
+3.1 Formato y duración
+
+
+--- PAGE 3 ---
+
+• Duración: 15 a 20 minutos de presentación + 5 minutos de preguntas.
+• Formato: Presentación de diapositivas (PowerPoint, Beamer/LaTeX o Google Slides).
+• La presentación debe estar en español (los términos técnicos pueden mantenerse en inglés).
+• Se debe entregar el archivo de la presentación antes de la sesión (ver plazos en sección 6).
+3.2 Secciones obligatorias de la presentación
+La presentación debe seguir la siguiente estructura mínima:
+1. Portada (1 diapositiva)
+◦ Título del proyecto final.
+◦ Nombre del/los estudiante(s).
+◦ Fecha de presentación.
+2. Introducción y motivación (1–2 diapositivas)
+◦ Descripción breve del problema clínico o técnico que aborda el proyecto.
+◦ Relevancia clínica y tecnológica del tema.
+◦ Pregunta de investigación o hipótesis de trabajo.
+3. Metodología de búsqueda bibliográfica (1 diapositiva)
+◦ Bases de datos utilizadas (e.g., PubMed, IEEE Xplore, Google Scholar, Scopus).
+◦ Palabras clave utilizadas en la búsqueda (en inglés y español).
+◦ Criterios de inclusión y exclusión de artículos.
+4. Resumen de los artículos revisados (3–6 diapositivas)
+◦ Para cada artículo se debe presentar:
+Referencia completa (autores, título, revista/conferencia, año).
+Objetivo o problemática que aborda.
+Metodología utilizada (técnicas de procesamiento de imágenes, modelo de ML, etc.).
+Resultados principales y métricas de evaluación reportadas.
+Fortalezas y limitaciones identificadas por el/la estudiante.
+Relevancia para su propio proyecto.
+5. Análisis comparativo y síntesis (1–2 diapositivas)
+◦ Tabla o figura comparativa de los métodos revisados.
+◦ Identificación de brechas, tendencias y oportunidades en el área.
+◦ Justificación de la metodología propuesta para el proyecto final en base a la literatura.
+6. Conclusiones de la revisión (1 diapositiva)
+◦ Síntesis de los hallazgos más relevantes.
+◦ Cómo la revisión bibliográfica orienta el diseño del proyecto final.
+
+
+--- PAGE 4 ---
+
+7. Referencias (1 diapositiva)
+◦ Lista completa de las referencias en formato IEEE.
+◦ Ejemplo de formato IEEE: J. Smith y A. Jones, "Segmentation of Brain MRI Using Deep  
+Learning," IEEE Trans. Med. Imag., vol. 39, no. 5, pp. 1234–1245, May 2020.
+4. Consejos y Buenas Prácticas para la Presentación
+• No leer directamente las diapositivas: use figuras, tablas y palabras clave, y explique con sus 
+propias palabras.
+• Cada diapositiva no debe tener más de 6–8 líneas de texto.
+• Incluya  figuras  ilustrativas  tomadas  de  los  artículos  revisados  (citando  la  fuente  
+correctamente).
+• Practique la presentación antes de la clase para respetar el tiempo asignado.
+• Prepare al menos 2–3 respuestas para posibles preguntas del docente y sus compañeros.
+• Use un puntero o cursor visible al exponer.
+5. Rúbrica de Evaluación – Presentación de Revisión Bibliográfica
+Puntaje máximo: 100 puntos (equivale al 15% de la nota final del curso). 
+Criterio Descripción Puntaje máx.
+Selección  y  calidad  de  
+artículos
+Los  7+  artículos  son  relevantes  para  el  proyecto, 
+provienen  de  fuentes  indexadas  y  son  recientes 
+(preferentemente últimos 5 años).
+20 pts.
+Análisis crítico El estudiante no solo resume, sino que analiza y critica 
+cada  artículo:  identifica  fortalezas,  limitaciones  y 
+relevancia para su proyecto.
+25 pts.
+Síntesis y comparación Se  presenta  una  tabla  o  figura  comparativa.  Se 
+identifican  tendencias,  brechas  y  se  justifica  la 
+metodología del proyecto final.
+20 pts.
+Claridad y estructura La  presentación  sigue  la  estructura  requerida,  es 
+clara, ordenada y visualmente adecuada. Respeta el  
+tiempo asignado.
+15 pts.
+Dominio oral El estudiante demuestra dominio del tema, responde  
+preguntas con argumentos técnicos y se expresa con 
+fluidez.
+10 pts.
+Formato de referencias Las referencias están en formato IEEE, correctas y  
+completas. 5 pts.
+TOTAL 95 pts.
+
+
+--- PAGE 5 ---
+
+Los 5 pts restantes se entregarán por la participación del o los alumnos en las otras presentaciones, 
+si hacen preguntas o observaciones acerca de lo expuesto por sus compañeros.
+6. Plazos y Entrega
+• La presentación se realizará durante el horario de clases.
+• El archivo de la presentación debe enviarse al profesor con al menos 24 horas de anticipación 
+al horario de la clase.
+• El nombre del archivo debe seguir el formato: RevBib_Apellido1_Apellido2_INF402.pptx  
+(o .pdf).
+• No se aceptarán entregas tardías sin justificación previa y documentada.
+
+
+--- PAGE 6 ---
+
+PARTE II
+Proyecto Final del Curso
+1. Descripción General
+El proyecto final es la actividad más importante del curso y representa el 45% de la nota final 
+(presentación oral 15% + manuscrito tipo paper 30%). El objetivo es que el estudiante aplique de 
+manera integradora las herramientas de procesamiento y reconstrucción de imágenes médicas, así 
+como técnicas de machine learning, a un problema clínico o técnico concreto y relevante.
+El proyecto se desarrolla individualmente o en grupos de máximo 2 estudiantes (según lo indique el 
+docente), y su entrega final consiste en dos componentes:
+• Un manuscrito en formato IEEE Transactions on Medical Imaging (IEEE TMI).
+• Una presentación oral del proyecto ante el curso.
+2. Requisitos del Manuscrito (IEEE TMI)
+2.1 Formato general
+• El manuscrito debe redactarse siguiendo estrictamente el template IEEE Transactions on 
+Medical Imaging (disponible en https://www.ieee.org/publications/authors/index.html).
+• Extensión: máximo 5 páginas (sin incluir referencias ni apéndices opcionales).
+• Redactado en español o inglés (se recomienda inglés para familiarizarse con el estándar 
+académico).
+• Entrega en formato PDF. El código fuente debe adjuntarse en un archivo comprimido (.zip).
+• Fuente: Times New Roman 10 pt, columnas dobles (según template IEEE).
+2.2 Estructura obligatoria del manuscrito
+El manuscrito debe contener las siguientes secciones:
+8. Título, autores y resumen (Abstract)
+◦ Título descriptivo del trabajo (en español e inglés si se escribe en español).
+◦ Nombre(s) del/los autor(es) e institución (Universidad Técnica Federico Santa María).
+◦ Abstract de 150–250 palabras: debe incluir contexto, objetivo, método, resultados 
+principales y conclusión.
+◦ Palabras clave: 4–6 términos representativos del trabajo (Index Terms en formato 
+IEEE).
+9. Introducción
+
+
+--- PAGE 7 ---
+
+◦ Contexto clínico o técnico del problema abordado.
+◦ Relevancia e importancia del problema.
+◦ Revisión breve del estado del arte (citar los artículos de la revisión bibliográfica).
+◦ Brechas o limitaciones en la literatura que motivan el trabajo.
+◦ Objetivo específico del proyecto e hipótesis de trabajo.
+◦ Estructura del manuscrito (opcional pero recomendado).
+10. Materiales y Métodos
+◦ Descripción de la base de datos o conjunto de imágenes médicas utilizado:
+ Modalidad de imagen (TC, RM, RX, ultrasonido).
+ Fuente (base de datos pública o institucional, nombre y referencia).
+ Número de imágenes, sujetos, resoluciones y características relevantes.
+◦ Pipeline de procesamiento de imágenes:
+ Preprocesamiento (normalización, eliminación de ruido, etc.).
+ Métodos de mejora, restauración o reconstrucción aplicados.
+ Segmentación (si aplica).
+◦ Modelo de machine learning:
+ Arquitectura utilizada (e.g., U-Net, ResNet, GAN, etc.).
+ Proceso de entrenamiento: optimizador, función de pérdida, tasa de 
+aprendizaje, número de épocas.
+ Estrategia de validación (cross-validation, split 
+entrenamiento/validación/prueba).
+◦ Hardware y software utilizado (GPU, Python/MATLAB, librerías).
+11. Experimentos y Resultados
+◦ Presentación clara y organizada de los resultados.
+◦ Métricas de evaluación utilizadas, según la tarea:
+ Segmentación: Dice Score, IoU, Hausdorff Distance.
+ Clasificación: Accuracy, Precision, Recall, F1-score, AUC-ROC.
+ Restauración/reconstrucción: PSNR, SSIM, RMSE.
+◦ Figuras de alta calidad: incluir ejemplos visuales de resultados (imágenes de entrada, 
+procesadas y ground truth si aplica).
+◦ Tablas comparativas: comparar el método propuesto con al menos un método de 
+referencia (baseline).
+◦ Análisis cuantitativo y cualitativo de los resultados.
+12. Discusión
+◦ Interpretación de los resultados en el contexto clínico o técnico.
+◦ Comparación con trabajos relacionados de la literatura.
+◦ Fortalezas y limitaciones del trabajo desarrollado.
+◦ Trabajo futuro: posibles mejoras o extensiones del proyecto.
+
+
+--- PAGE 8 ---
+
+13. Conclusiones
+◦ Resumen de los principales aportes del trabajo.
+◦ Respuesta a la hipótesis o pregunta de investigación.
+◦ Impacto potencial en la práctica clínica o en el campo.
+14. Referencias
+◦ Mínimo 10 referencias.
+◦ Formato IEEE estricto.
+15. Apéndices (opcional)
+◦ Código adicional, tablas extensas o experimentos complementarios.
+3. Requisitos del Código Fuente
+• El código debe ser reproducible: un evaluador con el mismo entorno debe poder ejecutarlo 
+y obtener los mismos resultados.
+• Debe incluir un archivo README.md con instrucciones claras de instalación y ejecución.
+• Lenguajes aceptados: Python o MATLAB.
+• El código debe estar comentado en las secciones principales.
+• Si se usan bases de datos externas, incluir instrucciones o scripts de descarga.
+• Estructura recomendada del repositorio:
+◦ src/ – Código fuente principal.
+◦ data/ – Datos de prueba (o instrucciones para descargarlos).
+◦ models/ – Modelos entrenados o scripts de entrenamiento.
+◦ results/ – Figuras y tablas generadas.
+◦ README.md – Instrucciones de uso.
+4. Presentación Oral del Proyecto Final
+4.1 Formato y duración
+• Duración: 20 a 25 minutos de presentación + 10 minutos de preguntas.
+• La presentación debe incluir una demostración en vivo o video del sistema/algoritmo 
+desarrollado.
+• Formato: diapositivas en PowerPoint, Beamer/LaTeX o Google Slides.
+• El archivo de presentación debe enviarse al docente con al menos 24 horas de anticipación.
+4.2 Estructura recomendada
+16. Portada: título, autores, fecha.
+17. Introducción: problema, motivación e hipótesis (2–3 diapositivas).
+
+
+--- PAGE 9 ---
+
+18. Estado del arte: resumen de los trabajos más relevantes (1–2 diapositivas).
+19. Materiales y métodos: base de datos, pipeline y modelo (3–5 diapositivas).
+20. Resultados: figuras, tablas y métricas (3–5 diapositivas).
+21. Discusión y conclusiones (1–2 diapositivas).
+22. Demostración en vivo o video (1–2 minutos).
+23. Referencias principales (1 diapositiva).
+5. Rúbrica de Evaluación – Proyecto Final
+5.1 Manuscrito IEEE TMI (30% de la nota final → evaluado sobre 100 pts.)
+Criterio Descripción Puntaje máx.
+Calidad del abstract e 
+introducción
+El abstract sintetiza correctamente el trabajo. La 
+introducción contextualiza el problema, revisa la 
+literatura y define claramente el objetivo.
+15 pts.
+Materiales y métodos La metodología es completa, replicable y bien 
+descrita. Se justifican las decisiones de diseño 
+(arquitectura, hiperparámetros, métricas).
+20 pts.
+Resultados y análisis Los resultados son presentados con métricas 
+adecuadas, figuras de calidad y comparación con 
+baselines. El análisis es riguroso.
+25 pts.
+Discusión y conclusiones Se interpretan los resultados críticamente, se 
+identifican limitaciones y se propone trabajo futuro. 10 pts.
+Formato IEEE El manuscrito sigue fielmente el template IEEE TMI. 
+Referencias en formato correcto y completas. 10 pts.
+Calidad del código El código es limpio, comentado, reproducible e 
+incluye README. 10 pts.
+Originalidad e impacto El trabajo propone algo novedoso o una aplicación 
+relevante. Va más allá de reproducir un tutorial. 15 pts.
+TOTAL 100 pts.
+5.2 Presentación Oral (15% de la nota final → evaluado sobre 100 pts.)
+Criterio Descripción Puntaje máx.
+Claridad y estructura La presentación sigue una lógica clara. Las 
+diapositivas son visualmente adecuadas y no 
+recargadas.
+15 pts.
+Dominio del contenido El estudiante demuestra conocimiento profundo del 25 pts.
+
+
+--- PAGE 10 ---
+
+tema y responde correctamente las preguntas.
+Presentación de 
+resultados
+Los resultados son explicados con claridad, se usan 
+figuras y tablas de forma efectiva. 20 pts.
+Demostración práctica Se muestra el sistema/algoritmo funcionando (en vivo 
+o video) de forma clara. 20 pts.
+Manejo del tiempo La presentación se ajusta al tiempo asignado (20–25 
+min). 10 pts.
+Calidad de la 
+comunicación
+El estudiante se expresa con fluidez, usa 
+terminología técnica correcta y mantiene la atención 
+del público.
+5 pts.
+TOTAL 95 pts.
+Los 5 pts restantes se entregarán por la participación del o los alumnos en las otras presentaciones, 
+si hacen preguntas o observaciones acerca de lo expuesto por sus compañeros.
+6. Consideraciones Éticas e Integridad Académica
+• Todo el código y texto entregado debe ser de autoría propia o debidamente referenciado.
+• El uso de bases de datos públicas debe citarse con la referencia y licencia correspondiente.
+• Queda estrictamente prohibido el plagio parcial o total de código o texto sin la debida 
+citación.
+• El uso de inteligencia artificial generativa (e.g., ChatGPT, Copilot) debe declararse 
+explícitamente en el manuscrito, indicando en qué partes se usó y cómo.
+• El incumplimiento de estas normas puede resultar en calificación 0 en el proyecto y ser 
+derivado a instancias disciplinarias según el Reglamento Estudiantil de la USM.
+7. Plazos y Entrega del Proyecto Final
+Entregable Indicación
+Presentación de revisión bibliográfica Según calendario del curso. Archivo enviado 24 hrs antes.
+Manuscrito IEEE TMI (PDF + 
+código .zip)
+Entrega por correo al docente 48 hrs antes de la presentación 
+oral.
+Presentación oral del proyecto final Según calendario del curso (últimas semanas del semestre). 
+Archivo de presentación enviado 24 hrs antes.
+Nombre de archivo del manuscrito: Paper_Apellido1_Apellido2_INF402.pdf
+Nombre del archivo ZIP del código: Codigo_Apellido1_Apellido2_INF402.zip
+Nombre del archivo de la presentación: Presentacion_Apellido1_Apellido2_INF402.pdf

@@ -2,7 +2,26 @@ __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
 
-# Colab/runtime artifacts
+# Local data and generated artifacts
+data/**
+!data/
+!data/README.md
+!data/samples/
+!data/samples/test.jpg
+
+models/**
+!models/
+!models/README.md
+
+results/**
+!results/
+!results/README.md
+
+_revision_pendiente/runtime_cache/
+
+# Legacy output names, in case old scripts regenerate them
+outputs/
+training_runs/
 proyecto_dental_cnn/runs/
 proyecto_dental_cnn/outputs/
 proyecto_dental_cnn/data/

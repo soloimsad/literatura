@@ -1,0 +1,988 @@
+# Source PDF: 3-A_Fully_Automated_Method_For_3D_Individual_Tooth.pdf
+# Pages: 8
+
+
+
+--- PAGE 1 ---
+
+This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License. For more information, see https://creativecommons.org/licenses/by-nc-nd/4.0/
+This article has been accepted for publication in a future issue of this journal, but has not been fully edited. Content may change prior to final publication. Citation information: DOI 10.1109/TPAMI.2021.3086072, IEEE
+Transactions on Pattern Analysis and Machine Intelligence
+IEEE TRANSACTIONS ON P A TTERN ANAL YSIS AND MACHINE INTELLIGENCE, VOL. XX, NO. XX, JUL Y 2020 1
+A fully automated method for 3D individual tooth
+identication and segmentation in dental CBCT
+T ae Jun Jang, Kang Cheol Kim, Hyun Cheol Cho, and Jin Keun Seo
+Abstract—Accurate and automatic segmentation of three-dimensional (3D) individual teeth from cone-beam computerized
+tomography (CBCT) images is a challenging problem because of the difficulty in separating an individual tooth from adjacent teeth and
+its surrounding alveolar bone. Thus, this paper proposes a fully automated method of identifying and segmenting 3D individual teeth
+from dental CBCT images. The proposed method addresses the aforementioned difficulty by developing a deep learning-based
+hierarchical multi-step model. First, it automatically generates upper and lower jaws panoramic images to overcome the computational
+complexity caused by high-dimensional data and the curse of dimensionality associated with limited training dataset. The obtained 2D
+panoramic images are then used to identify 2D individual teeth and capture loose- and tight- regions of interest (ROIs) of 3D individual
+teeth. Finally , accurate 3D individual tooth segmentation is achieved using both loose and tight ROIs. Experimental results showed that
+the proposed method achieved an F1-score of 93.35% for tooth identification and a Dice similarity coefficient of 94.79% for individual
+3D tooth segmentation. The results demonstrate that the proposed method provides an effective clinical and practical framework for
+digital dentistry .
+Index Terms—Cone-beam computerized tomography , digital dentistry , tooth segmentation, tooth identification, deep learning
+✦
+1 I NTRODUCTION
+D
+IGITAL dentistry is evolving rapidly along with
+the rapid innovation of artificial intelligence and
+the development of cone-beam computerized tomography
+(CBCT), intra-oral and facial scanners, and dental three-
+dimensional (3D) printing. Digital dentistry enhances a den-
+tist's efficiency and improves the accuracies of orthodon-
+tic diagnoses, treatment planning, and surgical guides.
+A fundamental component of digital dentistry is the 3D
+segmentation of teeth, jaws, and skulls from CBCT im-
+ages. Moreover, accurate digital models of individual tooth
+geometry and jaws facilitate the simulation of prosthetic
+evaluation, cephalometric analysis, computer-aided digital
+implant planning, and bite irregularity prediction.
+Automatic and accurate 3D individual tooth segmenta-
+tion from CBCT images is a difficult task for the following
+reasons: (i) similar intensities between teeth roots and their
+surrounding alveolar bone; (ii) attached boundary between
+adjacent teeth in the crown parts.
+Over the last decade, there have been several attempts to
+develop 3D tooth segmentation methods, most of which are
+based on level set methods [1], [2], [3]. Unfortunately , level
+set-based methods have fundamental limitations in achiev-
+ing fully automated segmentation. This difficulty arises
+from the dependence of such methods on the initialization
+of level set, and the automatic initialization is hindered by
+the complex image structure associated with adjacent teeth,
+the jaw, the alveolar bone, etc. Hence, user intervention
+through manual initialization is inevitable in this approach.
+Recently , deep learning methods have been applied in
+3D tooth segmentation. Leeet al.[4] and Raoet al.[5] used
+• The authors are with School of Mathematics and Computing (Computa-
+tional Science and Engineering), Y onsei University, Seoul, 03722.
+E-mail: kangcheol@yonsei.ac.kr (corresponding author)
+Manuscript received July XX, 2020.
+a fully convolutional network (FCN) [6] for whole tooth
+segmentation instead of individual tooth segmentation. Cui
+et al.[7] proposed a deep learning framework for individ-
+ual tooth segmentation and identification using Mask R-
+CNN [8]. The limitation of these deep learning methods is
+patch-based approach to handle high-dimension inputs (e.g.,
+800×800×400 voxels in 3D CBCT image) and a limited
+amount of labeled samples. It is necessary to use both local
+and global information to achieve accurate segmentation
+with individual tooth identification. Thus, the drawback of
+this patch-based approach is its inability to reflect contextual
+(global) information, since each output of a convolutional
+network only depends on the corresponding patch.
+Automatic individual tooth identification is also a dif-
+ficult task. Recently , several individual tooth identification
+attempts [9], [10] have been made using convolutional net-
+works. However, these approaches suffer from misclassifi-
+cation errors caused by adjacent teeth similarities.
+Existing 3D tooth segmentation methods may not be
+effective for CBCT images that are severely corrupted by
+metal artifacts. In a clinical dental CBCT environment (e.g.,
+low dose radiation exposure), metal artifacts become com-
+mon as the number of aged patients with metallic prosthesis
+increases. Hence, to be practical, it would be desirable to
+develop a method that works well even in images degraded
+by metal artifacts.
+This paper aimed to address these limitations by devel-
+oping a hierarchical multi-step deep learning model. The
+proposed method is summarized as follows. Thefirst step
+is to circumvent the high-dimensionality problem associ-
+ated with CT images. This step automatically generates
+panoramic images of the upper and lower jaws from CT
+images where its size is smaller than the original CT image.
+The panoramic images of the upper and lower jaws are sep-
+arated to reduce overlaps between adjacent teeth. Notably ,
+
+
+--- PAGE 2 ---
+
+This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License. For more information, see https://creativecommons.org/licenses/by-nc-nd/4.0/
+This article has been accepted for publication in a future issue of this journal, but has not been fully edited. Content may change prior to final publication. Citation information: DOI 10.1109/TPAMI.2021.3086072, IEEE
+Transactions on Pattern Analysis and Machine Intelligence
+IEEE TRANSACTIONS ON P A TTERN ANAL YSIS AND MACHINE INTELLIGENCE, VOL. XX, NO. XX, JUL Y 2020 2
+Panoramic image reconstruction of upper jaw and lower jaw
+3D CBCT image
+Separation
+Reference curves
+Projection
+Panoramic images
+individual segmentation
+Tooth identification &
+Nteeth recognition
+•Segmentation
+•Identification
+•Detection
+Extraction of loose & tight 3D tooth ROIs
+images
+Cropped
+ loose ROI
+!Concat
+tight ROI
+Nteeth
+3D tooth segmentation
+segmentation
+3D tooth
+ CT slice image
+ 3D visualization
+using 2-channel input
+3D segmentation
+Nteeth
+Fig. 1: Schematic diagram of the proposed method, which consists of four steps: 1) Panoramic image reconstruction of
+the upper and lower jaws from a 3D CBCT image; 2) tooth identification and 2D segmentation of individual teeth in the
+panoramic images; 3) extraction of loose and tight 3D tooth ROIs using the detected bounding boxes and segmented tooth
+regions; and 4) 3D segmentation for individual teeth from the 3D tooth ROIs.
+panoramic images generated from CBCT images are not
+significantly affected by metal-related artifacts. We utilize
+these panoramic images to accurately perform 2D tooth
+detection, identification, and segmentation. The second step
+is to identify individual teeth by numbers according to
+F´ed´eration Dentaire Internationale (FDI) dental notation.
+We develop a tooth detection method to localize bounding
+boxes that enclose each tooth and classifies them into four
+types (incisors, canines, premolars, and molars) according
+to tooth morphology . This method solve misclassification
+problems caused by similar adjacent teeth. The individual
+teeth are then identified using the results of tooth detection.
+Additionally , we perform 2D segmentation for individual
+teeth. The third step extracts loose and tight 3D tooth
+regions of interest (ROIs) from the detected boxes and
+segmented tooth regions for accurate 3D individual tooth
+segmentation in thefinal step. Tight ROIs improve the
+segmentation accuracy . A schematic diagram of our method
+is described in Fig. 1.
+2 M ETHOD
+Let X denote a 3D CT image with voxel grid Ω:=
+{(x, y, z)∈ N3 : 1≤x≤N x,1≤y≤N y ,1≤z≤N z },
+where Nx, Ny and Nz are the voxel sizes in directions x
+(sagittal axis), y (frontal axis) and z (longitudinal axis), re-
+spectively . The valueX(x, y, z) at the voxel position (x, y, z)
+is represented as the attenuation coefficient.
+2.1 Step 1: Panoramic image reconstruction of the up-
+per and lower jaws from a 3D CBCT image
+This step describes the automatic reconstruction of the up-
+per and lower jaw panoramic images from a 3D CBCT image
+X. Fig. 2 illustrates the workflow.
+[Step 1-1] To obtain a binary bone image ˜X, a 3D CT
+image X is segmented into three classes (air, soft tissues,
+and bones) using multi-level version of Otsu's method [11].
+The threshold values T0 and T1 for the histogram h(t)
+corresponding to X are determined by
+{T0, T1}= argmax
+t0 ,t1
+!! !
+0≤i<t0
+ip(i)
+!
+0≤i<t0
+p(i) − "
+0≤i<t0
+p(i)
+#2
++
+! !
+t0 ≤i<t1
+ip(i)
+!
+t0 ≤i<t1
+p(i) − "
+t0 ≤i<t1
+p(i)
+#2
++
+! !
+i≥t1
+ip(i)
+!
+i≥t1
+p(i) − "
+i≥t1
+p(i)
+#2"
+,
+(1)
+where p(t) =h(t)/ #
+i
+h(i). The binary image ˜X(x, y, z) is
+1 if X(x, y, z)≥T 1, and 0 otherwise. As this value T1
+corresponds to an interface between soft tissues and bones,
+˜X can be viewed as a rough segmentation of upper and
+lower jaws.
+[Step 1-2] Given the binary image ˜X, the connected-
+component labeling (CCL) [12] is used to extract the upper
+jaw part ( ˜Xupper ) and the lower jaw part ( ˜Xlower ). The CCL
+method generates all the connected components in a binary
+image. The lower jaw part is the largest connected compo-
+nent and the upper jaw part is the second largest connected
+component.
+[Step 1-3] To create a 2D image MXupper displaying the
+upper dental arch, we apply maximum intensity projection
+(MIP) in the z direction to the grayscale upper jaw image
+(Xupper =X⊙ ˜Xupper , where ⊙ is an elementwise product), as
+follows:
+MXupper (x, y) = max
+z
+Xupper (x, y, z). (2)
+Similarly , we obtain Xlower and MXlower for the lower jaw.
+
+
+--- PAGE 3 ---
+
+This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License. For more information, see https://creativecommons.org/licenses/by-nc-nd/4.0/
+This article has been accepted for publication in a future issue of this journal, but has not been fully edited. Content may change prior to final publication. Citation information: DOI 10.1109/TPAMI.2021.3086072, IEEE
+Transactions on Pattern Analysis and Machine Intelligence
+IEEE TRANSACTIONS ON P A TTERN ANAL YSIS AND MACHINE INTELLIGENCE, VOL. XX, NO. XX, JUL Y 2020 3
+CT imageX
+z
+x
+y
+[1-1]
+thresholding
+product
+elementwise
+˜X
+[1-2]
+CCL
+˜Xlower
+ ˜Xupper
+components
+other connected
+Xupper
+Xlower
+y
+x
+z
+[1-3]
+MIP
+MXupper
+MXlower
+y
+x
+[1-4]
+& closing
+thresholding
+AXupper
+AXlower
+[1-5]
+processing
+& curve
+-zation
+skeletoni
+CXupper
+CXlower
+[1-6]
+projection
+PXupper
+PXlower
+z
+s
+Fig. 2: Workflow of Step 1. This shows reconstruction process of upper jaw panoramic image PXupper and low jaw
+panoramic images PXlower from a 3D CT image X.
+[Step 1-4] Next, binary dental arch regions AXupper and
+AXlower is obtained by applying the Otsu's method [11]
+and the morphological closing [13] to the MIP images
+MXupper and MXlower , respectively . Here, Otsu thresholding
+is adopted to get rough dental arch regions and the morpho-
+logical closing is used to smoothen out the rough regions.
+[Step 1-5] Given the upper dental arch region AXupper ,
+we employ the morphological skeletonization [14] to extract
+a medial axis of the dental arch region. Cubic spline curve
+fitting, interpolation and extrapolation techniques are then
+applied to the medial axis, to obtain a smooth reference
+curve CXupper passing through the dental arch region com-
+pletely . The reference curve can be expressed as
+CXupper ={r(s) = (x(s), y(s)) :s∈1,2,· · ·, N s}, (3)
+where Ns is the number of curve points. Similarly , we can
+obtain CXlower from the lower dental arch region AXlower .
+[Step 1-6] An upper jaw panoramic image is given by
+PXupper (s, z) =
+ˆ α
+−α
+Xupper (r(s) +tn(s), z)dt, (4)
+where s is the parameter in (3), r(s)∈C Xupper , and n(s) is
+the unit normal vector at r(s). Similarly , we obtain the lower
+panoramic image PXlower . For notational simplicity , we refer
+to both PXupper and PXupper as P .
+2.2 Step 2: Bounding box detection, identication, and
+2D segmentation of individual teeth in the reconstructed
+panoramic images
+This step aims to identify and segment individual teeth in
+the reconstructed panoramic images. To achieve the goal,
+wefirst perform individual tooth detection. Here, the teeth
+are classified as incisor (class 1), canine (class 2), premolar
+(class 3), and molar (class 4).
+[Step 2-1] To detect individual teeth in a panoramic
+image, we develop a deep learning method inspired by one-
+stage object detection [15], [16]. Given a panoramic image P
+Gij
+(sij , zij )
+wij
+hij
+pij : molarY=f det(P)∈R 40×20×9
+Yij
+Fig. 3: Concept of Step 2-1. A detection map fdet predicts
+Yij for each Gij .
+with size Ns×Nz (e.g., N s×Nz = 640×320 ), a uniform grid
+is created. Each grid cell Gij has a size of g×g (e.g., g= 16 ).
+Then we learn a tooth detection map fdet :P→Y that is
+given by
+fdet(P) =
+$
+%%%&
+Y1,1 Y2,1 · · ·Y Ns ,1
+Y1,2 Y2,2 · · ·Y Ns ,2
+... . . . ...
+Y1,Nz · · · · · ·Y Ns ,Nz
+'
+((() , (5)
+where Yij = (cij ,b ij ,p ij ) predicting a confidence score cij ,
+a bounding box component bij , and a class probability pij
+in Gij , as illustrated in Fig. 3. Here, a confidence score cij ∈
+[0,1] represents the existence of the tooth center in Gij . A
+bounding box component [17] is denoted by
+bij =
+* sij
+g −(i−1), zij
+g −(j−1),log wij
+aw
+,log hij
+ah
++
+, (6)
+where (sij , zij ) is the center of the bounding box in Gij ,
+(wij , hij ) indicates its width and height, and (aw , ah) are
+the width and height of an anchor box. For a tooth in the
+bounding box corresponding to bij , we estimate a class
+probability
+pij = (pij,1, pij,2, pij,3, pij,4), (7)
+where pij,k represents the probability of being tooth class k.
+
+
+--- PAGE 4 ---
+
+This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License. For more information, see https://creativecommons.org/licenses/by-nc-nd/4.0/
+This article has been accepted for publication in a future issue of this journal, but has not been fully edited. Content may change prior to final publication. Citation information: DOI 10.1109/TPAMI.2021.3086072, IEEE
+Transactions on Pattern Analysis and Machine Intelligence
+IEEE TRANSACTIONS ON P A TTERN ANAL YSIS AND MACHINE INTELLIGENCE, VOL. XX, NO. XX, JUL Y 2020 4
+Tofind exact bounding boxes among the predicted boxes
+for all Gij , we remove the boxes with scores eij =c ij ∗
+(max
+k
+pij,k) less than 0.5. Several bounding boxes with high
+scores may appear near the center of a tooth. We adopt the
+non-maximum suppression (NMS) technique tofilter out
+bounding boxes that highly overlap high-scoring boxes.
+Using a labeled training dataset {(P (n), Y ∗(n))}N
+n=1
+where Y ∗ is ground-truth labeling, fdet is learned by min-
+imizing the loss between the output Y=f det(P) and the
+ground-truth Y ∗ as follows:
+Ldet =
+N,
+n=1
+-
+. ,
+(i,j)∈Ω1
+(1−c (n)
+ij )2 +λ 1
+,
+(i,j)∈Ω0
+(0−c (n)
+ij )2
++λ2
+,
+(i,j)∈Ω1
+|b∗(n)
+ij −b (n)
+ij |2 +
+,
+(i,j)∈Ω1
+CE(p∗(n)
+ij ,p (n)
+ij )
+/
+0 ,
+(8)
+where Ω1 ={(i, j)|c ∗
+ij = 1} , Ω0 ={(i, j)|c ∗
+ij = 0} , and CE
+is the cross-entropy . This multi-task loss Ldet represent the
+prediction errors where objects exist ( c∗
+ij = 1) and no objects
+exist ( c∗
+ij = 0 ). Since there is no object in most grid cells,
+the confidence score tends to be predicted as zero [15]. The
+constants λ1 = 0.1 and λ2 = 5 are used to eliminate the
+imbalance.
+[Step 2-2] For each tooth in the detected bounding box,
+a number is assigned to identify the unique tooth according
+to the FDI system. For convenience, wefirst explain how
+the numbers are assigned to teeth in the upper jaw. As
+illustrated in Fig. 4, the detected bounding boxes are listed
+in ascending order of s coordinates of the box center. The
+upper right and left quadrants are divided from the middle
+of four sequential incisor boxes. For the two right incisors
+and the two left incisors, number 1 and 2 are assigned from
+the inside to the outside, respectively . Number 3 is assigned
+to the canines since there is only one in each quadrant. On
+each side, premolars are assigned numbers 4 and 5 from
+the inside to the outside. Likewise, molars are assigned
+numbers 6, 7 and 8 (if a wisdom tooth exists).
+III IC CP PP PM MM MM M
+Identification
+112 23 34 45 56 67 78 8
+Fig. 4: Tooth identification process using the classification
+results in Step 2-1. The capital letters represent thefirst
+letters of the tooth type and the numbers are tooth codes.
+[Step 2-3] The proposed 2D tooth segmentation method
+uses a U-shaped FCN [18] with taking advantage of bound-
+ing box knowledges obtained from Step 2-1. Let S∈
+RNs ×Nz denote the segmentation image for a tooth corre-
+sponding to a detected bounding box in P . We construct
+a training dataset {I(n)
+roi , Y (n)
+roi }N
+n=1 for individual teeth seg-
+mentation, where I(n)
+roi and Y (n)
+roi are tooth images of P and
+S cropped by the bounding boxes. A segmentation map
+fseg :I roi →Y roi is learned using a U-shaped network and
+minimizing the following loss:
+Lseg = 1
+N
+N,
+n=1
+!
+− 1
+M
+,
+x
+Y (n)
+roi (x) log
+1
+fseg
+2
+I(n)
+roi
+3
+(x)
+4"
+,
+(9)
+where x is a pixel position and M is the number of pixels of
+Yroi.
+2.3 Step 3: Extraction of loose and tight 3D tooth ROIs
+using the detected bounding boxes and segmented
+tooth regions
+In this step, 3D tooth ROIs are obtained using the results of
+the previous steps. As described in Fig. 5, a bounding box
+containing one tooth is projected back into the 3D CBCT
+image using (3) and (4). A loose ROI domain of the target
+tooth is then given by
+Dbox ={(r(s) +tn(s), z) :−α≤t≤α,(s, z)∈B box},
+(10)
+where Bbox is the set of pixel positions in the bounding box.
+Similarly , a tight ROI domain Dseg is determined by Bseg,
+which is the set of pixel positions in the 2D tooth segmented
+region in the box.
+The loose 3D tooth ROI Rbox is obtained by changing
+the voxel values outside Dbox to 0, and extracting content in
+a 3D bounding box thatfits closely around Dbox, as shown
+in Fig. 5. Similarly , we obtain the tight 3D tooth ROI Rseg
+by processing Dseg instead of Dbox, and using the same 3D
+bounding box as above.
+2.4 Step 4: 3D segmentation for individual teeth from
+the 3D tooth ROIs
+In thisfinal step, 3D individual tooth segmentation is per-
+formed by applying the loose ROI ( Rbox) and tight ROI
+(Rseg) to the 3D version of a U-shaped FCN [18]. The tight
+ROI is crucial for improving the segmentation accuracy
+at the attached boundaries between a target tooth and its
+neighboring teeth.
+The input of the network is Iroi3 =R box ⊕R seg,
+which represents the concatenating vector of two ROIs.
+Let Yroi3 denote a binary vector representing 3D tooth seg-
+mentation corresponding to Iroi3. Using a training dataset
+{I(n)
+roi3, Y (n)
+roi3 }N
+n=1, we learn a 3D segmentation map fseg3 :
+Iroi3 →Y roi3 by minimizing the following loss:
+Lseg3 = 1
+N
+N,
+n=1
+!
+− 1
+V
+,
+v
+Y (n)
+roi3 (v) log
+1
+fseg3
+2
+I(n)
+roi3
+3
+(v)
+4"
+,
+(11)
+where v is a voxel position and V is the number of voxels
+of Yroi3.
+3 E XPERIMENTS AND RESULTS
+3.1 Dataset and implementation details
+Experiments were conducted on 3D CT images produced
+by a dental CBCT with a circular trajectory (DENTRI-X;
+HDXWILL, Seoul, South Korea) using tube voltage 90kVp
+
+
+--- PAGE 5 ---
+
+This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License. For more information, see https://creativecommons.org/licenses/by-nc-nd/4.0/
+This article has been accepted for publication in a future issue of this journal, but has not been fully edited. Content may change prior to final publication. Citation information: DOI 10.1109/TPAMI.2021.3086072, IEEE
+Transactions on Pattern Analysis and Machine Intelligence
+IEEE TRANSACTIONS ON P A TTERN ANAL YSIS AND MACHINE INTELLIGENCE, VOL. XX, NO. XX, JUL Y 2020 5
+z
+s
+panoramic imageP(s, z)
+Projected back
+into CT image
+CT imageX(x, y, z)
+y
+x
+z
+Extract ROIs by
+3D bounding box
+loose ROIR box
+ tight ROIR seg
+Fig. 5: Extraction of loose and tight 3D tooth ROIs from a detected bounding box and a segmented tooth region.
+and tube current 10mA. All available datasets were for-
+matted in the Digital Imaging and Communications in
+Medicine (DICOM) standard. The size of the CT image was
+800×800×400 , and its pixel spacing and slice thickness
+were both 0.2mm. During scanning, a bite block was used
+to prevent contact between the upper and lower teeth.
+We received 97 dental 3D CBCT images from HDXWILL.
+Using these data, we generated 194 upper and lower jaws
+panoramic images in Step 1. We also received labeled data
+consisting of 97 2D individual tooth segmentation, bound-
+ing box components, and tooth codes, as well as 11 3D
+individual tooth segmentation. The labeling was performed
+by experts in HDXWILL.
+Panoramic images were generated by (4) using a tomo-
+graphic reconstruction software (TIGRE) [19]. The size of all
+panoramic images wasfixed at 640×320 . The width of the
+panoramic images was determined by 640 reference curve
+points in Step 1-5. Those points were obtained by interpo-
+lating 500 points on the smooth curve and extrapolating 70
+points at each end of the curve. To completely cover the
+teeth at both ends, we extrapolated 70 points (approximately
+13.3mm) taking into account the average size of the molars.
+The height size 320 was determined by removing 80 CT
+slices that do not contain teeth from the bottom.
+For the 2D detection and segmentation in Steps 2-1
+and 2-3, 66 CBCT dataset were used for training and 31
+dataset for testing. Because two panoramic images (upper
+and lower parts) were obtained from each CBCT image
+through Step 1, we used 132 labeled training data and 62 test
+data. Meanwhile, for the 3D segmentation in Step 4, 7 CBCT
+dataset were used for training and 4 dataset for testing.
+Since each patient has approximately 28 to 32 teeth, each
+CBCT image can provide approximately 28 to 32 training
+data for individual tooth segmentation. To be precise, we
+used 216 training data and 112 test data for the for the 3D
+segmentation in Step 4. In Steps 2-3 and 4, 2D tooth images
+and 3D loose and tight ROIs were resized to 128×128 and
+128×128×128 , respectively .
+The proposed neural networks were trained by minimiz-
+ing losses in (8), (9), and (11) using Adam optimizer [20]
+from PyTorch [21]. We usedfive-fold cross validation on
+the training dataset. Batch sizes of 8, 32, and 4 are were
+set for each training in Steps 2-1, 2-3, and 4, respectively .
+We analyzed the runtime of the proposed convolutional
+networks on a desktop with a GeForce RTX 2070 GPU. The
+processing time of the proposed three networks in Step 2-1,
+2-3, and 4 were 3.62, 5.98, and 6.82 ms/batch, respectively .
+3.2 Evaluation and Result of the proposed method
+3.2.1 Bounding box detection
+For a quantitative evaluation of the bounding box detec-
+tion, we provide precision-recall (PR) curves [22] and their
+average precision (AP) [22], as shown in Fig. 6. When
+the intersection over union (IOU) threshold value was 0.6,
+according to the PR curve, the precision tends to stay high
+as the recall increases, and the AP was 88.11%.
+IOU threshold AP
+0.6
+0.7
+0.8
+0.9
+88.11%
+86.41%
+79.62%
+68.54%
+Fig. 6: Tooth detection results. A PR curve represents the
+change in the precision as the recall increases for afixed
+IOU threshold value, which is used for NMS.
+3.2.2 Individual tooth identication
+This subsection presents the performance evaluation of
+tooth identification. The precision, recall, and F1-score were
+used to evaluate the results of the identification method.
+In Step 2-1, teeth are initially classified into four types,
+instead of directly predicting the eight tooth codes. The di-
+rect identification method can often misclassify teeth within
+the same tooth type. As shown in Fig. 7 (a), the direct
+method confusesfirst premolars (code 4) and wisdom teeth
+(code 8) in particular. These errors hinder the performance
+improvement of the direct method. However, the four type-
+based method achieves a high accuracy by preventing mis-
+classification due to similar tooth shape. Table 1 and Fig.
+7 show that the proposed method leads to more accurate
+identification.
+TABLE 1: Quantitative evaluation for tooth identification
+methods.
+Metric Direct method Proposed method
+Precision ( %) 93.05±7.85 96.81±1.67
+Recall ( %) 87.22±7.42 90.13±5.30
+F1-score ( %) 90.04±7.63 93.35±2.54
+
+
+--- PAGE 6 ---
+
+This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License. For more information, see https://creativecommons.org/licenses/by-nc-nd/4.0/
+This article has been accepted for publication in a future issue of this journal, but has not been fully edited. Content may change prior to final publication. Citation information: DOI 10.1109/TPAMI.2021.3086072, IEEE
+Transactions on Pattern Analysis and Machine Intelligence
+IEEE TRANSACTIONS ON P A TTERN ANAL YSIS AND MACHINE INTELLIGENCE, VOL. XX, NO. XX, JUL Y 2020 6
+(a)
+ (b)
+Fig. 7: Confusion matrix for tooth identification. (a) Result
+of the direct method. (b) Result of the proposed method.
+3.2.3 Individual tooth segmentation
+To evaluate the 2D and 3D tooth segmentation perfor-
+mances, we used precision, recall, Dice similarity coefficient
+(DSC) [23], Hausdorff distance (HD) [23], and average sym-
+metric surface distance (ASSD) [23].
+2D individual tooth segmentation.The proposed method
+proceeds in two steps consisting of the bounding box de-
+tection in Step 2-1 and individual segmentation in Step 2-3,
+while Mask R-CNN [8] achieves the same task in a single
+step. We implemented both approaches, and reported the
+quantitative evaluations in Table 1. The proposed method is
+numerically more accurate than the Mask R-CNN.
+The accuracy of 2D segmentation is important because
+the key of precise 3D tooth segmentation is to use tight tooth
+ROIs obtained by 2D segmentation. Although the detection
+and segmentation are not performed simultaneously , two
+simple convolutional networks (one-stage object detection
+and U-shaped FCN) are designed to achieve a high accuracy .
+TABLE 2: Quantitative evaluation for 2D tooth segmentation
+methods.
+Metric 2D Mask R-CNN Proposed method
+Precision ( %) 92.17±5.55 96.18±4.67
+Recall ( %) 90.35±5.87 93.17±5.83
+DSC ( %) 90.98±3.25 94.41±3.10
+HD ( mm) 1.64±0.93 1.34±0.86
+ASSD ( mm) 0.39±0.12 0.27±0.12
+3D individual tooth segmentation.We developed a fully
+automated multi-step method for 3D individual segmenta-
+tion. To verify the effectiveness of the proposed method,
+we compared it with Mask R-CNN [8], Path aggregation
+network (PANet) [24], Hybrid task cascade (HTC) [25], and
+ToothNet [7]. These methods cannot be applied to large
+size 3D CBCT images directly because of the computational
+limit. For comparison experiments, we implemented the
+methods in a patch-based fashion as an alternative to avoid
+the limitation. We also performed an ablation study of
+the proposed method by using either loose or tight ROI,
+or both. The four methods adopted for comparison show
+lower performances, as shown in Table 3. These methods
+perform individual segmentation from the original CBCT
+images. In contrast, the proposed method has the advantage
+of using loose and tight ROIs that provide considerable
+background region in advance. In particular, the tight ROI
+excludes structures on sides (e.g., adjacent teeth, jaw, etc) of
+the target tooth. When using only tight ROIs, the recall is the
+lowest because loss of tooth information may occur where
+the tight ROI boundary intersects the tooth boundary , as
+shown in Table 4. The use of only loose ROI shows that
+HD tends to be high because there is no information on
+tooth boundaries. A combination of the two ROIs enhances
+the segmentation performance, as the tight ROI provides
+detailed information on the target tooth and the loose ROI
+compensates for the disadvantage of the tight ROI. Wilcoxon
+signed-rank test [26] was used to calculate the statistical
+significance differences between the proposed method and
+other methods, as summarized in Tables 3 and 4.
+3.3 Metal artifact-contaminated CBCT images
+The proposed method effectively handles problems that are
+caused by metal-related artifacts. Fig. 8 shows that the CBCT
+image is severely contaminated by metal artifacts, whereas
+metal artifacts are significantly reduced in the correspond-
+ing panoramic image generated by the CBCT image. The
+panoramic images in Step 1 allow to accurately perform 2D
+tooth detection and segmentation. These results provides
+prior knowledge of each 3D tooth as loose and tight ROIs.
+As shown in Fig. 8, the tight ROI excludes adjacent teeth,
+even though the tooth boundaries are obscured by metal
+artifacts. Fig. 9 shows a qualitative evaluation for 3D tooth
+segmentation in a CBCT image with metal artifacts. As
+shown in Fig. 9 (f) and (g), the segmentation results in the
+degraded CT image are superior to those of Fig. 9 (a)-(e) as
+the tight ROIs provide robust tooth boundary information.
+However, Fig. 9 (f) presents that using only the tight ROIs
+may not provide precise segmentation because it can cut
+out the edges of the teeth. Therefore, Fig. 9 (g) illustrates the
+advantages and effectiveness of the proposed method using
+both loose and tight ROIs.
+Fig. 8: Image on the left is a CBCT image that is affected
+by metal artifacts. Image on the right is a panoramic image
+generated from Step 1, which is not affected by metal-related
+artifacts.
+3.4 Missing tooth
+People often lose their teeth due to factors such as cavities,
+periodontal disease, aging, dental trauma and orthodontic
+treatment. To address these cases, we applied CBCT images
+with missing teeth (except for wisdom teeth) to the pro-
+posed method. Four type-based classification was success-
+ful, but tooth identification was incomplete. With exception
+of canines, each tooth quadrant contains two or more teeth
+of the same type. When numbering the neighboring tooth of
+the same type as a missing tooth (Fig. 10 (a)), it is difficult
+to identify the neighboring tooth in panoramic images.
+Therefore, we suggest to perform only classification in the
+case of a missing tooth, as shown in Fig. 10 (b).
+
+
+--- PAGE 7 ---
+
+This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License. For more information, see https://creativecommons.org/licenses/by-nc-nd/4.0/
+This article has been accepted for publication in a future issue of this journal, but has not been fully edited. Content may change prior to final publication. Citation information: DOI 10.1109/TPAMI.2021.3086072, IEEE
+Transactions on Pattern Analysis and Machine Intelligence
+IEEE TRANSACTIONS ON P A TTERN ANAL YSIS AND MACHINE INTELLIGENCE, VOL. XX, NO. XX, JUL Y 2020 7
+TABLE 3: Quantitative comparison for 3D tooth segmentation methods.
+Mask R-CNN PANet HTC T oothNet Loose & tight ROIs
+Metric mean ± std p-value mean ± std p-value mean ± std p-value mean ± std p-value mean ± std
+Precision (%) 93.98±11.07<0.001 93.61±6.88<0.001 91.43±4.28<0.001 89.40±5.84<0.001 95.97±2.00
+Recall (%) 88.82±10.69<0.01 89.76±7.89<0.001 92.31±6.23<0.001 93.25±5.71<0.001 93.71±2.08
+DSC (%) 90.75±10.48<0.001 91.04±6.32<0.001 91.59±4.57<0.001 91.40±5.07<0.001 94.79±1.34
+HD (mm) 3.09±2.01<0.001 2.84±1.88<0.001 2.60±1.79<0.001 2.53±1.97<0.001 1.66±0.72
+ASSD (mm) 0.36±0.31<0.001 0.32±0.26<0.001 0.26±0.21<0.001 0.27±0.20<0.001 0.14±0.04
+(a)
+ (b)
+ (c)
+ (d)
+ (e)
+ (f)
+ (g)
+Fig. 9: Qualitative comparison for 3D individual tooth segmentation in a CBCT image with metal artifacts. Segmentation
+result of (a) Mask R-CNN, (b) PANet, (c) HTC, (d) ToothNet, (e) the proposed method using loose ROIs, (f) tight ROIs, and
+(g) both loose and tight ROIs.
+TABLE 4: Ablation study for the proposed method.
+Loose ROI Tight ROI
+Metric mean ± std p-value mean ± std p-value
+Precision (%) 94.80±6.53<0.001 94.70±2.79<0.001
+Recall (%) 92.98±3.68<0.001 91.54±2.12<0.001
+DSC (%) 93.76±4.81<0.001 92.98±1.75<0.001
+HD (mm) 2.37±1.93<0.001 1.98±1.20<0.001
+ASSD (mm) 0.20±0.20<0.001 0.19±0.05<0.001
+112 23 3P P6 67 7
+Fig. 10: Illustration of tooth identification when there are
+missing teeth. Two premolar (class P) corresponding to
+number 4 are missing.
+4 D ISCUSSION AND CONCLUSION
+In this paper, we developed a fully automated segmentation
+and identification method for individual teeth and jaws
+from CBCT images. Given CBCT data, the method automat-
+ically generates the maxillary and mandibular panoramic
+images that are projected along the reference curve rep-
+resenting a region-based shape feature of a dental arch.
+In the maxillary and mandibular panoramic images, 2D
+tooth segmentation and identification are performed using
+deep learning methods, which are vital in high-precision 3D
+tooth segmentation and identification. Experiments showed
+that the accuracy of the method is suitable for the clinical
+setting. Our method overcomes the limitations of existing
+automated methods by achieving fully automation and
+improved accuracy . Additionally , the method addresses the
+difficulty of learning high-dimensional data.
+The main idea of the proposed method is the careful
+use of the accurate and robust 2D tooth segmentation and
+identification in 2D panoramic images in an indirect manner
+to address the difficulty of 3D segmentation from metal
+artifact-contaminated 3D CBCT images. In a clinical den-
+tal CBCT environment (e.g., low dose radiation exposure),
+metal related-artifacts are common. The proposed method
+utilizes the crucial observation that metal artifacts are signif-
+icantly reduced in the upper and lower panoramic images
+generated from the CBCT images. The outcome in Step
+2 serves as strong prior knowledge of 3D tooth segmen-
+tation, which plays an important role in separating teeth
+from 3D images, in cases where teeth are often contacted,
+overlapped, or connected owing to metal-related artifacts.
+The automated system proposed in this study improves
+the efficiency of dentists by reducing the cumbersome
+and time-consuming manual intervention. The result pro-
+vides an improved workflow for dentists to simulate pre-
+operative orthodontic treatment and manufacture implant
+surgical guides. Digital occlusion analysis is potentially
+possible by combining our method with the intra-oral scan
+model [27], [28] via registration. Hence, it is expected to play
+an important role in digital dentistry .
+ACKNOWLEDGEMENTS
+This research was supported by a grant of the Korea Health
+Technology R&D Project through the Korea Health Industry
+Development Institute (KHIDI), funded by the Ministry
+of Health & Welfare, Republic of Korea (HI20C0127). We
+would like to express our deepest gratitude HDXWILL
+which shares dental CBCT images and ground-truth data.
+
+
+--- PAGE 8 ---
+
+This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License. For more information, see https://creativecommons.org/licenses/by-nc-nd/4.0/
+This article has been accepted for publication in a future issue of this journal, but has not been fully edited. Content may change prior to final publication. Citation information: DOI 10.1109/TPAMI.2021.3086072, IEEE
+Transactions on Pattern Analysis and Machine Intelligence
+IEEE TRANSACTIONS ON P A TTERN ANAL YSIS AND MACHINE INTELLIGENCE, VOL. XX, NO. XX, JUL Y 2020 8
+REFERENCES
+[1] H. Gao and O. Chae, "Individual tooth segmentation from ct
+images using level set method with shape and intensity prior,"
+Pattern Recognition, vol. 43, no. 7, pp. 2406–2417, 2010.
+[2] Y . Gan, Z. Xia, J. Xiong, Q. Zhao, Y . Hu, and J. Zhang, "Toward
+accurate tooth segmentation from computed tomography images
+using a hybrid level set model,"Medical physics, vol. 42, no. 1, pp.
+14–27, 2015.
+[3] H.-T. Yau, T.-J. Yang, and Y .-C. Chen, "Tooth model reconstruction
+based upon data fusion for orthodontic treatment simulation,"
+Computers in biology and medicine, vol. 48, pp. 8–16, 2014.
+[4] S. Lee, S. Woo, J. Yu, J. Seo, J. Lee, and C. Lee, "Automated
+cnn-based tooth segmentation in cone-beam ct for dental implant
+planning,"IEEE Access, vol. 8, pp. 50 507–50 518, 2020.
+[5] Y . Rao, Y . Wang, F. Meng, J. Pu, J. Sun, and Q. Wang, "A symmetric
+fully convolutional residual network with dcrf for accurate tooth
+segmentation,"IEEE Access, vol. 8, pp. 92 028–92 038, 2020.
+[6] J. Long, E. Shelhamer, and T. Darrell, "Fully convolutional net-
+works for semantic segmentation," inProceedings of the IEEE
+conference on computer vision and pattern recognition, 2015, pp. 3431–
+3440.
+[7] Z. Cui, C. Li, and W. Wang, "Toothnet: automatic tooth instance
+segmentation and identification from cone beam ct images," in
+Proceedings of the IEEE Conference on Computer Vision and Pattern
+Recognition, 2019, pp. 6368–6377.
+[8] K. He, G. Gkioxari, P . Doll ´ar, and R. Girshick, "Mask r-cnn," in
+Proceedings of the IEEE international conference on computer vision,
+2017, pp. 2961–2969.
+[9] Y . Miki, C. Muramatsu, T. Hayashi, X. Zhou, T. Hara, A. Kat-
+sumata, and H. Fujita, "Classification of teeth in cone-beam ct
+using deep convolutional neural network,"Computers in biology
+and medicine, vol. 80, pp. 24–29, 2017.
+[10] D. V . Tuzoff, L. N. Tuzova, M. M. Bornstein, A. S. Krasnov ,
+M. A. Kharchenko, S. I. Nikolenko, M. M. Sveshnikov , and G. B.
+Bednenko, "Tooth detection and numbering in panoramic radio-
+graphs using convolutional neural networks,"Dentomaxillofacial
+Radiology, vol. 48, no. 4, p. 20180051, 2019.
+[11] N. Otsu, "A threshold selection method from gray-level his-
+tograms,"IEEE transactions on systems, man, and cybernetics, vol. 9,
+no. 1, pp. 62–66, 1979.
+[12] H. Samet and M. Tamminen, "Efficient component labeling of
+images of arbitrary dimension represented by linear bintrees,"
+IEEE transactions on pattern analysis and machine intelligence, vol. 10,
+no. 4, pp. 579–586, 1988.
+[13] R. M. Haralick, S. R. Sternberg, and X. Zhuang, "Image analysis
+using mathematical morphology ,"IEEE transactions on pattern
+analysis and machine intelligence, no. 4, pp. 532–550, 1987.
+[14] T.-C. Lee, R. L. Kashyap, and C.-N. Chu, "Building skeleton
+models via 3-d medial surface axis thinning algorithms,"CVGIP:
+Graphical Models and Image Processing, vol. 56, no. 6, pp. 462–478,
+1994.
+[15] J. Redmon, S. Divvala, R. Girshick, and A. Farhadi, "You only look
+once: Unified, real-time object detection," inProceedings of the IEEE
+conference on computer vision and pattern recognition, 2016, pp. 779–
+788.
+[16] W. Liu, D. Anguelov , D. Erhan, C. Szegedy , S. Reed, C.-Y . Fu,
+and A. C. Berg, "Ssd: Single shot multibox detector," inEuropean
+conference on computer vision. Springer, 2016, pp. 21–37.
+[17] R. Girshick, J. Donahue, T. Darrell, and J. Malik, "Rich feature hier-
+archies for accurate object detection and semantic segmentation,"
+inProceedings of the IEEE conference on computer vision and pattern
+recognition, 2014, pp. 580–587.
+[18] O. Ronneberger, P . Fischer, and T. Brox, "U-net: Convolutional
+networks for biomedical image segmentation," inInternational
+Conference on Medical image computing and computer-assisted inter-
+vention. Springer, 2015, pp. 234–241.
+[19] A. Biguri, M. Dosanjh, S. Hancock, and M. Soleimani, "Tigre:
+a matlab-gpu toolbox for cbct image reconstruction,"Biomedical
+Physics & Engineering Express, vol. 2, no. 5, p. 055010, 2016.
+[20] D. P . Kingma and J. Ba, "Adam: A method for stochastic optimiza-
+tion,"arXiv preprint arXiv:1412.6980, 2014.
+[21] A. Paszke, S. Gross, F. Massa, A. Lerer, J. Bradbury , G. Chanan,
+T. Killeen, Z. Lin, N. Gimelshein, L. Antigaet al., "Pytorch:
+An imperative style, high-performance deep learning library ," in
+Advances in neural information processing systems, 2019, pp. 8026–
+8037.
+[22] M. Everingham, L. Van Gool, C. K. Williams, J. Winn, and
+A. Zisserman, "The pascal visual object classes (voc) challenge,"
+International journal of computer vision, vol. 88, no. 2, pp. 303–338,
+2010.
+[23] P . F. Raudaschl, P . Zaffino, G. C. Sharp, M. F. Spadea, A. Chen,
+B. M. Dawant, T. Albrecht, T. Gass, C. Langguth, M. L ¨uthiet al.,
+"Evaluation of segmentation methods on head and neck ct: auto-
+segmentation challenge 2015,"Medical physics, vol. 44, no. 5, pp.
+2020–2036, 2017.
+[24] S. Liu, L. Qi, H. Qin, J. Shi, and J. Jia, "Path aggregation network
+for instance segmentation," inProceedings of the IEEE conference on
+computer vision and pattern recognition, 2018, pp. 8759–8768.
+[25] K. Chen, J. Pang, J. Wang, Y . Xiong, X. Li, S. Sun, W. Feng, Z. Liu,
+J. Shi, W. Ouyanget al., "Hybrid task cascade for instance seg-
+mentation," inProceedings of the IEEE/CVF Conference on Computer
+Vision and Pattern Recognition, 2019, pp. 4974–4983.
+[26] F. Wilcoxon, "Individual comparisons by ranking methods," in
+Breakthroughs in statistics. Springer, 1992, pp. 196–202.
+[27] X. Xu, C. Liu, and Y . Zheng, "3d tooth segmentation and labeling
+using deep convolutional neural networks,"IEEE transactions on
+visualization and computer graphics, vol. 25, no. 7, pp. 2336–2348,
+2018.
+[28] S. Tian, N. Dai, B. Zhang, F. Yuan, Q. Yu, and X. Cheng, "Automatic
+classification and segmentation of teeth on 3d dental model using
+hierarchical deep learning networks,"IEEE Access, vol. 7, pp.
+84 817–84 828, 2019.
+T ae Jun Jangreceived the B.S. degree in math-
+ematics from Dongguk University , Seoul, South
+Korea, in 2018. He is currently pursuing the
+Ph.D. degree in school of mathematics and com-
+puting (computational science and engineering)
+at Y onsei University , South Korea. His research
+interests include image processing, computer-
+ized tomography , and deep learning for medical
+image analysis.
+Kang Cheol Kimreceived the B.S. degree
+in physics from Chung-Ang University , Seoul,
+South Korea, in 2016. He received the Ph.D.
+degree in computational science and engineer-
+ing from Y onsei University , South Korea. His re-
+search interests include nonlinear ill-posed in-
+verse problem, image processing, computer vi-
+sion, and deep learning for medical image anal-
+ysis.
+Hyun Cheol Choreceived the B.S. degree in
+mathematics from Kookmin University , Seoul,
+South Korea, in 2018. He is currently pursu-
+ing the Ph.D. degree in school of mathematics
+and computing (computational science and en-
+gineering) at Y onsei University , South Korea. His
+research interests include computer vision, and
+deep learning for medical image analysis.
+Jin Keun Seoreceived the Ph.D. degree from
+the University of Minnesota, in 1991. He has
+been a Professor with Y onsei University , South
+Korea, since 1995. He is currently the Director
+of BK21plus of Computational Science and En-
+gineering. His research interests include inverse
+problems, mathematical modeling, image pro-
+cessing, partial differential equations, harmonic
+analysis, and deep learning for medical image
+analysis.

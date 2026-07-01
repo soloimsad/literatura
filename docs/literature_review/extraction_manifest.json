@@ -1,0 +1,66 @@
+[
+  {
+    "pdf": "0-Lineamientos_PRIM_INF402.pdf",
+    "text_file": "0-Lineamientos_PRIM_INF402.txt",
+    "pages": 10,
+    "characters": 15937,
+    "status": "ok",
+    "warnings": []
+  },
+  {
+    "pdf": "1-Conditional_Diffusion_Models_for_CT_Image_Synthesis from.pdf",
+    "text_file": "1-Conditional_Diffusion_Models_for_CT_Image_Synthesis_from.txt",
+    "pages": 24,
+    "characters": 72600,
+    "status": "ok",
+    "warnings": []
+  },
+  {
+    "pdf": "2-Tooth_Segmentation_in_3D_CBCT_Using_CNN.pdf",
+    "text_file": "2-Tooth_Segmentation_in_3D_CBCT_Using_CNN.txt",
+    "pages": 18,
+    "characters": 56546,
+    "status": "ok",
+    "warnings": []
+  },
+  {
+    "pdf": "3-A_Fully_Automated_Method_For_3D_Individual_Tooth.pdf",
+    "text_file": "3-A_Fully_Automated_Method_For_3D_Individual_Tooth.txt",
+    "pages": 8,
+    "characters": 43528,
+    "status": "ok",
+    "warnings": []
+  },
+  {
+    "pdf": "4-Teeth_Detection_and_Dental_Problem_Classification.pdf",
+    "text_file": "4-Teeth_Detection_and_Dental_Problem_Classification.txt",
+    "pages": 7,
+    "characters": 37155,
+    "status": "ok",
+    "warnings": []
+  },
+  {
+    "pdf": "5-Image_Captioning_with_CNN_and_LSTM_using_Python.pdf",
+    "text_file": "5-Image_Captioning_with_CNN_and_LSTM_using_Python.txt",
+    "pages": 8,
+    "characters": 47600,
+    "status": "ok",
+    "warnings": []
+  },
+  {
+    "pdf": "6-A_Python_Programmed_Resnet-50_CNN_Designed_for_Low_Light_Image_Enhancement.pdf",
+    "text_file": "6-A_Python_Programmed_Resnet-50_CNN_Designed_for_Low_Light_Image_Enhancement.txt",
+    "pages": 6,
+    "characters": 28822,
+    "status": "ok",
+    "warnings": []
+  },
+  {
+    "pdf": "7-Performance_Analysis_of_Convolutional_Neural_Network_Models.pdf",
+    "text_file": "7-Performance_Analysis_of_Convolutional_Neural_Network_Models.txt",
+    "pages": 5,
+    "characters": 20913,
+    "status": "ok",
+    "warnings": []
+  }
+]

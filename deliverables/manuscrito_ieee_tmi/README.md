@@ -12,3 +12,7 @@ Estructura obligatoria:
 6. Conclusiones.
 7. Referencias.
 8. Apendices opcionales.
+
+Material de apoyo disponible:
+
+- `procedimiento_entrenamiento.md`: explicacion del flujo de preparacion de datos, entrenamiento de los dos modelos YOLO-seg, metricas esperadas y texto oral sugerido.

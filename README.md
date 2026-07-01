@@ -77,7 +77,8 @@ python src/train_tooth_piece_cnn.py `
 
 El codigo prepara recortes desde los poligonos del dataset y entrena una CNN en
 PyTorch para clasificar piezas dentales. La metodologia esta documentada en
-`docs/training_tooth_piece_cnn.md`.
+`docs/training_tooth_piece_cnn.md`. El roadmap completo del flujo y resultados
+disponibles esta en `docs/roadmap_clasificacion_piezas_dentales.md`.
 
 ### YOLO-seg local
 

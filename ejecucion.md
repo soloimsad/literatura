@@ -28,7 +28,7 @@ Estado actual esperado:
 
 - `data\samples\sample-19.jpg`: debe ser `True`.
 - `models\tooth_piece_classifier\weights\best.pt`: debe ser `True`.
-- `models\treatment_detector\weights\best.pt`: sera `False` hasta copiar ahi el modelo de tratamiento entrenado.
+- `models\treatment_detector\weights\best.pt`: debe ser `True`.
 
 ## 2. Mostrar clasificacion de pieza dental
 
@@ -60,7 +60,7 @@ Mostrar en la presentacion:
 
 Usar este comando cuando quieras mostrar deteccion de hallazgos dentales asociados a posible tratamiento, por ejemplo caries, coronas, restauraciones, implantes o lesiones.
 
-Requisito previo: debe existir este archivo:
+Requisito previo: debe existir este archivo local:
 
 ```text
 models\treatment_detector\weights\best.pt
@@ -85,7 +85,7 @@ results\demo_tratamiento\treatment_detector\sample-19_treatment_detector_labeled
 results\demo_tratamiento\treatment_detector\sample-19_treatment_detector_report.csv
 ```
 
-Si el comando falla con `No existe el modelo`, falta copiar el `.pt` entrenado en `models\treatment_detector\weights\best.pt`.
+Si el comando falla con `No existe el modelo`, revisar que el `.pt` local este en `models\treatment_detector\weights\best.pt`.
 
 ## 4. Mostrar ambos modelos en una misma demo
 
@@ -181,6 +181,14 @@ results\data_preparation\treatment\DATASET_ANALYSIS.md
 results\data_preparation\treatment\dataset_audit.json
 results\data_preparation\treatment\preparation_summary.json
 results\data_preparation\treatment\prepared_yolo_seg\data.yaml
+```
+
+Si se entrena nuevamente, el pipeline parte desde modelos locales dentro de `models/`. Para forzar un peso base especifico, usar `BASE_MODEL` con una ruta dentro de `models/`, por ejemplo:
+
+```powershell
+$env:BASE_MODEL="models\tooth_piece_classifier\weights\best.pt"
+python src\dental_xray_pipeline.py
+Remove-Item Env:\BASE_MODEL
 ```
 
 ## 7. Configuracion de presentacion

@@ -89,6 +89,8 @@ import torch
 import yaml
 from ultralytics import YOLO
 
+from model_registry import get_model_spec
+
 
 def seed_everything() -> None:
     random.seed(SEED)
@@ -103,6 +105,27 @@ def project_dir() -> Path:
     path = Path(os.getenv("PROJECT_DIR", str(default)))
     path.mkdir(parents=True, exist_ok=True)
     return path
+
+
+def ensure_model_under_models(path: Path) -> Path:
+    resolved = path.resolve()
+    models_root = (PROJECT_ROOT / "models").resolve()
+    if not resolved.exists():
+        raise FileNotFoundError(f"No existe el modelo local: {resolved}")
+    if not str(resolved).lower().startswith(str(models_root).lower()):
+        raise ValueError(f"El modelo debe estar dentro de {models_root}: {resolved}")
+    return resolved
+
+
+def resolve_training_base_model(dataset_kind: str) -> Path:
+    if os.getenv("BASE_MODEL"):
+        configured = Path(os.environ["BASE_MODEL"])
+        if not configured.is_absolute():
+            configured = PROJECT_ROOT / configured
+        return ensure_model_under_models(configured)
+
+    role = "tooth" if dataset_kind == "teeth" else "treatment"
+    return ensure_model_under_models(get_model_spec(role).weights)
 
 
 def resolve_segmentation_dataset() -> Path:
@@ -752,7 +775,9 @@ def main() -> None:
     if torch.cuda.is_available():
         print("GPU:", torch.cuda.get_device_name(0))
 
-    model = YOLO(os.getenv("BASE_MODEL", "yolov8n-seg.pt"))
+    base_model = resolve_training_base_model(dataset_kind)
+    print("Modelo base local:", base_model)
+    model = YOLO(str(base_model))
     default_run_name = "tooth_piece_classifier" if dataset_kind == "teeth" else "treatment_detector"
     run_name = os.getenv("RUN_NAME", default_run_name)
     runs_dir = PROJECT_ROOT / "models"

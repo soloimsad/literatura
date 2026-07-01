@@ -8,7 +8,7 @@
   "treatment": {
     "display_name": "Posible tratamiento o hallazgo",
     "weights": "models/treatment_detector/weights/best.pt",
-    "available_in_this_workspace": false,
+    "available_in_this_workspace": true,
     "description": "Modelo YOLO esperado para detectar hallazgos dentales asociados a posibles tratamientos."
   }
 }

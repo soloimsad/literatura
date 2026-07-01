@@ -31,7 +31,7 @@ Los modelos se usan por rol, no por rutas sueltas:
   - Estado local: disponible.
 - `treatment`: deteccion de posible tratamiento o hallazgo.
   - Ruta esperada: `models/treatment_detector/weights/best.pt`
-  - Estado local: pendiente de copiar el `.pt` entrenado.
+  - Estado local: disponible.
 
 La registry del proyecto esta en `src/model_registry.py` y
 `models/model_registry.json`.
@@ -51,6 +51,7 @@ y prepara datos YOLO en `data/_prepared_teeth_yolo_seg`. Variables utiles:
 - `PROJECT_DIR=<ruta_resultados>`
 - `EPOCHS=<numero>`
 - `SOURCE_IMAGE=<ruta_imagen>`
+- `BASE_MODEL=<ruta_en_models>` si quieres forzar otro peso local dentro de `models/`.
 
 ## Entrenamiento
 
@@ -61,6 +62,10 @@ python src/dental_xray_pipeline.py
 Las corridas de entrenamiento quedan en `models/tooth_piece_classifier/` o
 `models/treatment_detector/` segun el dataset seleccionado. Los reportes o
 predicciones generadas quedan en `results/`.
+
+El entrenamiento tambien usa modelos locales: por defecto parte desde
+`models/tooth_piece_classifier/weights/best.pt` para pieza dental o desde
+`models/treatment_detector/weights/best.pt` para tratamientos/hallazgos.
 
 ## Inferencia
 

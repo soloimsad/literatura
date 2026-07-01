@@ -9,6 +9,5 @@ Ruta esperada:
 models/treatment_detector/weights/best.pt
 ```
 
-En esta copia del repositorio no se encontro aun el archivo `best.pt` de este
-modelo. Cuando este disponible, debe ubicarse en la ruta anterior para que los
-notebooks y `src/predict_dental_xray.py` lo usen automaticamente.
+El archivo `best.pt` existe localmente en esta carpeta y es usado por los
+notebooks y `src/predict_dental_xray.py` mediante la registry del proyecto.

@@ -33,11 +33,25 @@ def roles_from_choice(choice: str) -> list[str]:
     return [choice]
 
 
+def ensure_model_under_models(path: Path) -> Path:
+    if not path.is_absolute():
+        path = PROJECT_ROOT / path
+    resolved = path.resolve()
+    models_root = (PROJECT_ROOT / "models").resolve()
+    if not resolved.exists():
+        raise FileNotFoundError(f"No existe el modelo local: {resolved}")
+    if not str(resolved).lower().startswith(str(models_root).lower()):
+        raise ValueError(f"El modelo debe estar dentro de {models_root}: {resolved}")
+    return resolved
+
+
 def role_model_path(role: str, args: argparse.Namespace) -> Path:
     if role == "tooth" and args.model:
-        return Path(args.model)
+        return ensure_model_under_models(Path(args.model))
     override = args.tooth_model if role == "tooth" else args.treatment_model
-    return Path(override) if override else get_model_spec(role).weights
+    if override:
+        return ensure_model_under_models(Path(override))
+    return ensure_model_under_models(get_model_spec(role).weights)
 
 
 def display_label(class_name: str) -> str:
@@ -249,9 +263,17 @@ def parse_args() -> argparse.Namespace:
         default="tooth",
         help="Modelo a ejecutar: pieza dental, tratamiento o ambos.",
     )
-    parser.add_argument("--model", default=None, help="Compatibilidad: ruta manual al modelo de pieza dental.")
-    parser.add_argument("--tooth-model", default=None, help="Ruta manual al modelo de clasificacion de pieza dental.")
-    parser.add_argument("--treatment-model", default=None, help="Ruta manual al modelo de posible tratamiento.")
+    parser.add_argument("--model", default=None, help="Compatibilidad: ruta dentro de models/ al modelo de pieza dental.")
+    parser.add_argument(
+        "--tooth-model",
+        default=None,
+        help="Ruta dentro de models/ al modelo de clasificacion de pieza dental.",
+    )
+    parser.add_argument(
+        "--treatment-model",
+        default=None,
+        help="Ruta dentro de models/ al modelo de posible tratamiento.",
+    )
     parser.add_argument("--image", required=True, help="Ruta a la radiografia de entrada.")
     parser.add_argument(
         "--output-dir",
@@ -284,7 +306,7 @@ def main() -> None:
         if not model_path.exists():
             raise FileNotFoundError(
                 f"No existe el modelo para '{spec.display_name}': {model_path}. "
-                "Ubica el .pt en esa ruta o usa el argumento manual correspondiente."
+                "Ubica el .pt dentro de models/ o usa un argumento manual que apunte a models/."
             )
 
         output_dir = output_root / spec.output_dir

@@ -55,6 +55,32 @@ y prepara datos YOLO en `data/_prepared_teeth_yolo_seg`. Variables utiles:
 
 ## Entrenamiento
 
+### CNN propia para clasificacion de piezas dentales
+
+Este es el flujo recomendado para el proyecto final si el objetivo es entrenar
+un modelo deep learning con el dataset local de piezas dentales:
+
+```powershell
+python src/train_tooth_piece_cnn.py --prepare-only --force-prepare
+```
+
+Luego:
+
+```powershell
+python src/train_tooth_piece_cnn.py `
+  --skip-prepare `
+  --epochs 20 `
+  --batch-size 64 `
+  --image-size 128 `
+  --device cpu
+```
+
+El codigo prepara recortes desde los poligonos del dataset y entrena una CNN en
+PyTorch para clasificar piezas dentales. La metodologia esta documentada en
+`docs/training_tooth_piece_cnn.md`.
+
+### YOLO-seg local
+
 ```powershell
 python src/dental_xray_pipeline.py
 ```
@@ -95,6 +121,23 @@ python src/predict_dental_xray.py `
 ```
 
 Cada comando genera una imagen rotulada y un reporte CSV.
+
+## Metricas desde checkpoints
+
+Para extraer las metricas guardadas dentro de los pesos locales:
+
+```powershell
+python src/extract_checkpoint_metrics.py
+```
+
+Esto genera:
+
+- `results/metrics/checkpoint_metrics.json`
+- `results/metrics/checkpoint_metrics.md`
+
+El script calcula F1 desde precision y recall. DSC/Dice no viene guardado
+directamente en los checkpoints; debe recalcularse con predicciones y mascaras
+ground truth compatibles.
 
 ## Notebooks
 

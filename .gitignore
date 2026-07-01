@@ -7,11 +7,14 @@ data/**
 !data/
 !data/README.md
 !data/samples/
-!data/samples/test.jpg
+!data/samples/sample-*.*
 
 models/**
 !models/
 !models/README.md
+!models/model_registry.json
+!models/**/
+!models/**/README.md
 
 results/**
 !results/

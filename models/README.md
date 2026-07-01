@@ -1,11 +1,13 @@
 # Models
 
-Carpeta para pesos entrenados y corridas de entrenamiento.
+Carpeta para pesos entrenados.
 
-La ruta esperada para el mejor modelo local es:
+## Roles
 
-```text
-models/training_runs/dental_xray_cnn_segmentation/weights/best.pt
-```
+- `tooth_piece_classifier/`: modelo disponible para segmentar/clasificar piezas dentales.
+- `treatment_detector/`: modelo esperado para posibles tratamientos o hallazgos.
+
+Las rutas oficiales estan declaradas en `src/model_registry.py` y resumidas en
+`models/model_registry.json`.
 
 Los pesos y artefactos pesados se mantienen fuera de git.

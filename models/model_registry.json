@@ -1,0 +1,14 @@
+{
+  "tooth": {
+    "display_name": "Clasificacion de pieza dental",
+    "weights": "models/tooth_piece_classifier/weights/best.pt",
+    "available_in_this_workspace": true,
+    "description": "Modelo YOLO-seg para segmentar piezas dentales y clasificar numero FDI."
+  },
+  "treatment": {
+    "display_name": "Posible tratamiento o hallazgo",
+    "weights": "models/treatment_detector/weights/best.pt",
+    "available_in_this_workspace": false,
+    "description": "Modelo YOLO esperado para detectar hallazgos dentales asociados a posibles tratamientos."
+  }
+}

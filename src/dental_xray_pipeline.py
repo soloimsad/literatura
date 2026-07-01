@@ -99,10 +99,7 @@ def seed_everything() -> None:
 
 
 def project_dir() -> Path:
-    if Path("/content").exists():
-        default = Path("/content/results")
-    else:
-        default = PROJECT_ROOT / "results"
+    default = PROJECT_ROOT / "results"
     path = Path(os.getenv("PROJECT_DIR", str(default)))
     path.mkdir(parents=True, exist_ok=True)
     return path
@@ -756,8 +753,9 @@ def main() -> None:
         print("GPU:", torch.cuda.get_device_name(0))
 
     model = YOLO(os.getenv("BASE_MODEL", "yolov8n-seg.pt"))
-    run_name = os.getenv("RUN_NAME", "dental_xray_cnn_segmentation")
-    runs_dir = PROJECT_ROOT / "models" / "training_runs"
+    default_run_name = "tooth_piece_classifier" if dataset_kind == "teeth" else "treatment_detector"
+    run_name = os.getenv("RUN_NAME", default_run_name)
+    runs_dir = PROJECT_ROOT / "models"
     model.train(
         data=str(data_yaml),
         epochs=int(os.getenv("EPOCHS", "15")),

@@ -165,7 +165,7 @@ Aporte principal:
 
 - Propone una arquitectura ResNet-50 para mejorar brillo, claridad y contraste.
 - Menciona mapas multiescala y SSIM loss para preservar texturas.
-- Implementacion en Python/Google Colab.
+- Implementacion reportada en Python.
 
 Metricas/resultados:
 

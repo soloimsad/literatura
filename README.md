@@ -10,6 +10,7 @@ Repositorio organizado segun las metricas y lineamientos del curso en
 - `data/`: datasets locales, datos preparados e imagenes de prueba.
 - `models/`: pesos y corridas de entrenamiento.
 - `results/`: figuras, tablas, auditorias, predicciones y salidas generadas.
+- `notebooks/`: flujo local para preparacion de datos, inferencia y demo.
 - `docs/evaluation/`: pauta, rubrica y lineamientos del curso.
 - `docs/literature_review/`: sintesis bibliografica y textos extraidos de articulos.
 - `deliverables/`: carpetas de trabajo para revision bibliografica, paper IEEE TMI y presentacion final.
@@ -20,6 +21,20 @@ Repositorio organizado segun las metricas y lineamientos del curso en
 ```powershell
 python -m pip install ultralytics opencv-python pyyaml numpy torch
 ```
+
+## Modelos locales
+
+Los modelos se usan por rol, no por rutas sueltas:
+
+- `tooth`: clasificacion/segmentacion de pieza dental.
+  - Ruta: `models/tooth_piece_classifier/weights/best.pt`
+  - Estado local: disponible.
+- `treatment`: deteccion de posible tratamiento o hallazgo.
+  - Ruta esperada: `models/treatment_detector/weights/best.pt`
+  - Estado local: pendiente de copiar el `.pt` entrenado.
+
+La registry del proyecto esta en `src/model_registry.py` y
+`models/model_registry.json`.
 
 ## Auditoria y preparacion de datos
 
@@ -43,20 +58,49 @@ y prepara datos YOLO en `data/_prepared_teeth_yolo_seg`. Variables utiles:
 python src/dental_xray_pipeline.py
 ```
 
-Las corridas de entrenamiento quedan en `models/training_runs/` y los reportes
-o predicciones generadas quedan en `results/`.
+Las corridas de entrenamiento quedan en `models/tooth_piece_classifier/` o
+`models/treatment_detector/` segun el dataset seleccionado. Los reportes o
+predicciones generadas quedan en `results/`.
 
 ## Inferencia
 
 ```powershell
 python src/predict_dental_xray.py `
-  --model models/training_runs/dental_xray_cnn_segmentation/weights/best.pt `
-  --image data/samples/test.jpg `
+  --model-role tooth `
+  --image data/samples/sample-19.jpg `
   --output-dir results/inference
 ```
 
-El comando genera una imagen segmentada/rotulada y un reporte CSV con las
-detecciones.
+Para ejecutar el modelo de tratamiento cuando el peso exista:
+
+```powershell
+python src/predict_dental_xray.py `
+  --model-role treatment `
+  --image data/samples/sample-19.jpg `
+  --output-dir results/inference
+```
+
+Para correr ambos modelos:
+
+```powershell
+python src/predict_dental_xray.py `
+  --model-role both `
+  --image data/samples/sample-19.jpg `
+  --output-dir results/inference
+```
+
+Cada comando genera una imagen rotulada y un reporte CSV.
+
+## Notebooks
+
+Orden sugerido para preparar la presentacion:
+
+1. `notebooks/01_preparacion_datos_local.ipynb`
+2. `notebooks/02_inferencia_pieza_dental.ipynb`
+3. `notebooks/03_inferencia_tratamiento.ipynb`
+4. `notebooks/04_demo_integrada_local.ipynb`
+
+Todo el flujo esta orientado a ejecucion local en este equipo.
 
 ## Entregables del curso
 

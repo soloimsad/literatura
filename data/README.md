@@ -7,4 +7,9 @@ Carpeta para datasets locales, datos preparados e imagenes de prueba.
 - `_prepared_teeth_yolo_seg/`: conversion local a YOLO-seg generada por `src/dental_xray_pipeline.py`.
 - `samples/`: imagenes pequenas para pruebas de inferencia.
 
+Uso dentro del proyecto:
+
+- Pieza dental: `teeth_segmentation/` -> `data/_prepared_teeth_yolo_seg/`.
+- Posible tratamiento: `dental-disease-panoramic-detection-dataset/` -> `results/data_preparation/treatment/prepared_yolo_seg/`.
+
 Los datasets pesados se mantienen fuera de git.
